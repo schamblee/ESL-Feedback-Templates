@@ -4,23 +4,23 @@ var MOCK_FEEDBACK = {
 	"feedbackTemplates": [
         {
             "id": "1111111",
-            "overview": "did a great job today learning the new words 'mom' and 'dad'. She was able to practice drawing a line on the screen. She repeated the sounds after the teacher and she can say the word 'mom' and 'dad' after looking at a picture of each person.",
-            "advice": "can practice their pronunciation of the words 'mom' and 'dad'. She can also practice saying 'My name is...' when she introduces herself to the teacher. She can continue practicing using the mouse in class to draw a line or circle.",
             "lessonId": "aaaaaa",
-            "lessonCode": "MC-L1-U1-LC1-1"
-        },
-        {
-            "id": "2222222",
-            "overview": "did a great job today repeating after the teacher and listening to the sentences in the lesson. He repeated 'rock, paper, scissors'. He was able to repeat the introduction 'My name is ____'",
-            "advice": "can practice drawing on the screen, moving objects, circling, and matching. He can also practice introducing himself: 'My name is...'.",
-            "lessonId": "bbbbbbb",
-            "lessonCode": "MC-L1-U1-LC1-2"
+            "text": "[name] did a great job today learning the new words 'mom' and 'dad'. [gender] was able to practice drawing a line on the screen. [gender] repeated the sounds after the teacher and [gender] can say the word 'mom' and 'dad' after looking at a picture of each person."
         }
     ]
 };
 
-let studentName = 'Alex'
-let userClosing = 'Thanks for another great lesson and if you enjoyed the lesson, please leave a rating if you can! - Teacher Stephanie'
+let MOCK_STUDENT_NAME = {
+    "students": [
+        {
+            "id": "1111111",
+            "userId": "aaaaaa",
+            "name": "Alex"
+        }
+    ]
+}
+
+let MOCK_USER_CLOSING = 'Thanks for another great lesson and if you enjoyed the lesson, please leave a rating if you can! - Teacher Stephanie'
 
 // this function's name and argument can stay the
 // same after we have a live API, but its internal
@@ -40,8 +40,8 @@ function displayFeedback(data) {
     for (index in data.feedbackTemplates) {
 	   $('body').append(
         `<p>${data.feedbackTemplates[index].lessonCode}</p>
-         <p>${studentName} ${data.feedbackTemplates[index].overview}</p>
-         <p>${studentName} ${data.feedbackTemplates[index].advice}</p>
+         <p>${data.feedbackTemplates[index].overview}</p>
+         <p>${data.feedbackTemplates[index].advice}</p>
          <p>${userClosing}</p>`);
     }
 }

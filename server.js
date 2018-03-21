@@ -2,6 +2,7 @@
 
 const express = require('express');
 
+
 const app = express();
 
 app.use(express.static('public'));
@@ -11,5 +12,17 @@ if (require.main === module) {
     console.info(`App listening on ${this.address().port}`);
   });
 }
+
+app.get('/index', function(req, res) { 
+	res.sendfile('./public/index.html'); 
+});
+
+app.get('/login', function(req, res) { 
+	res.sendfile('./public/login.html'); 
+});
+
+app.get('/feedback', function(req, res) { 
+	res.sendfile('./public/feedback.html'); 
+});
 
 module.exports = app;
