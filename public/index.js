@@ -20,7 +20,7 @@ let MOCK_STUDENT_NAME = {
     ]
 }
 
-let MOCK_USER_CLOSING = 'Thanks for another great lesson and if you enjoyed the lesson, please leave a rating if you can! - Teacher Stephanie'
+let userClosing = 'Thanks for another great lesson and if you enjoyed the lesson, please leave a rating if you can! - Teacher Stephanie'
 
 // this function's name and argument can stay the
 // same after we have a live API, but its internal
@@ -39,9 +39,7 @@ function getFeedback(callbackFn) {
 function displayFeedback(data) {
     for (index in data.feedbackTemplates) {
 	   $('body').append(
-        `<p>${data.feedbackTemplates[index].lessonCode}</p>
-         <p>${data.feedbackTemplates[index].overview}</p>
-         <p>${data.feedbackTemplates[index].advice}</p>
+        `<p>${data.feedbackTemplates[index].text}</p>
          <p>${userClosing}</p>`);
     }
 }
