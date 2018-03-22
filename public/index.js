@@ -1,23 +1,34 @@
 // this is mock data, but when we create our API
 // we'll have it return data that looks like this
 var MOCK_FEEDBACK = {
-	"feedbackTemplates": [
-        {
-            "id": "1111111",
-            "lessonId": "aaaaaa",
-            "text": "[name] did a great job today learning the new words 'mom' and 'dad'. [gender] was able to practice drawing a line on the screen. [gender] repeated the sounds after the teacher and [gender] can say the word 'mom' and 'dad' after looking at a picture of each person."
-        }
-    ]
+  "feedbackTemplates": [
+    {
+      "id": "1111111",
+      "lessonId": "aaaaaa",
+      "text": "[name] did a great job today learning the new words 'mom' and 'dad'. [gender] was able to practice drawing a line on the screen. [gender] repeated the sounds after the teacher and [gender] can say the word 'mom' and 'dad' after looking at a picture of each person."
+    }
+  ]
 };
 
 let MOCK_STUDENT_NAME = {
-    "students": [
-        {
-            "id": "1111111",
-            "userId": "aaaaaa",
-            "name": "Alex"
-        }
-    ]
+  "students": [
+    {
+      "id": "1111111",
+      "userId": "aaaaaa",
+      "name": "Alex"
+    }
+  ]
+}
+
+let MOCK_LESSONS = {
+  "lessons": [
+    {
+      "id": "111111",
+      "code": "MC-L2-U1-LC2-11",
+      "name": "Lesson 11 All About Me 11",
+      "templateId": "1111111"
+    }
+  ]
 }
 
 let userClosing = 'Thanks for another great lesson and if you enjoyed the lesson, please leave a rating if you can! - Teacher Stephanie'

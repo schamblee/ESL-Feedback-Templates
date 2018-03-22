@@ -12,7 +12,67 @@
   </header>
 <body>
   <main>
-  <h1>Feedback</h1>
+    <form>
+      <fieldset>
+      	<label for="level">Level:</label>
+      	<select id="level">
+      	  <option value="preVIP">Pre-VIPKID</option>
+      	  <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+      	</select>
+      	<label for="unit">Unit:</label>
+      	<select id="unit">
+      	  <option value="1">1</option>
+      	  <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+          <option value="8">8</option>
+          <option value="9">9</option>
+          <option value="10">10</option>
+          <option value="11">11</option>
+          <option value="12">12</option>
+      	</select>
+      	<label for="lesson">Lesson:</label>
+      	<select id="lesson">
+      	  <option value="1">1</option>
+      	  <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+          <option value="8">8</option>
+          <option value="9">9</option>
+          <option value="10">10</option>
+          <option value="11">11</option>
+          <option value="12">12</option>
+      	</select><br>
+     </fieldset>
+     <fieldset>
+      	<label for="student">Student Name:</label>
+      	<select id="student">
+      	  <option></option>
+      	  <option>Annie</option>
+      	  <option>Jerry</option>
+      	  <option>Kevin</option>
+      	  <option>Julia</option>
+      	</select> or
+      	<label for="new-name">New Name:</label>
+      	<input type="text" name="student"><br>
+        <input type="radio" name="gender" value="boy"> Boy
+        <input type="radio" name="gender" value="girl"> Girl
+      </fieldset>
+      <button class="js-submit">Submit</button>
+    </form>
+    <section role="region">
+      <a href="/">Sign Out</a>
+    </section>
   </main>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 	<script type="text/javascript" src="index.js"></script>
