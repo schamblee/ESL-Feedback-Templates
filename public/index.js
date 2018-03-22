@@ -5,7 +5,7 @@ var MOCK_FEEDBACK = {
     {
       "id": "1111111",
       "lessonId": "aaaaaa",
-      "text": "[name] did a great job today learning the new words 'mom' and 'dad'. [gender] was able to practice drawing a line on the screen. [gender] repeated the sounds after the teacher and [gender] can say the word 'mom' and 'dad' after looking at a picture of each person."
+      "text": "-name- did a great job today learning the new words 'mom' and 'dad'. [pronoun] was able to practice drawing a line on the screen. [pronoun] repeated the sounds after the teacher and [pronoun] can say the word 'mom' and 'dad' after looking at a picture of each person."
     }
   ]
 };
@@ -15,7 +15,7 @@ let MOCK_STUDENT_NAME = {
     {
       "id": "1111111",
       "userId": "aaaaaa",
-      "name": "Alex"
+      "name": "Annie"
     }
   ]
 }
@@ -40,28 +40,53 @@ let userClosing = 'Thanks for another great lesson and if you enjoyed the lesson
 // use jQuery's AJAX functionality to make a call
 // to the server and then run the callbackFn 
 function getFeedback(callbackFn) {
-    // we use a `setTimeout` to make this asynchronous
-    // as it would be with a real AJAX call.
-	setTimeout(function(){ callbackFn(MOCK_FEEDBACK)}, 1);
+  setTimeout(function(){ callbackFn(MOCK_FEEDBACK)}, 1);
 }
+
+/*function renderTemplate(name, pronoun, lesson) {
+  return `${name} did a great job today learning the new words 'mom' and 'dad'. 
+  ${pronoun} was able to practice drawing a line on the screen. ${pronoun} repeated 
+  the sounds after the teacher and ${pronoun} can say the word 'mom' and 'dad' after 
+  looking at a picture of each person.`
+}*/
 
 // this function stays the same when we connect
 // to real API later
+let student = 'Jerry'
 function displayFeedback(data) {
     for (index in data.feedbackTemplates) {
-	   $('body').append(
-        `<p>${data.feedbackTemplates[index].text}</p>
-         <p>${userClosing}</p>`);
+	   $('.js-output').append(
+        `<div class="feedbackTemplate">
+          <p class="time">TIME OF CLASS</p>
+          <p>Lesson 11 All About Me 11</p>
+          <p>${data.feedbackTemplates[index].text.replace(/-name-/i,`${student}`)}</p>
+          <p>${userClosing}</p>
+          <button class="deleteFeedback">Delete Feedback</button>
+         </div>`);
     }
 }
 
-// this function can stay the same even when we
-// are connecting to real API
-function getAndDisplayFeedback() {
-	getFeedback(displayFeedback);
+function selectDay() {
+  $('.dayForm').submit(event => {
+    event.preventDefault();
+    $('.templateForm').prop('hidden', false);
+  })
 }
 
-//  on page load do this
-$(function() {
-	getAndDisplayFeedback();
-})
+function getAndDisplayFeedback() {
+  $('.templateForm').submit(event => {
+    event.preventDefault();
+    $('.js-output').prop('hidden', false);
+    $('.feedbackControls').prop('hidden', false);
+	getFeedback(displayFeedback);
+  });
+}
+
+
+function handleFeedback() {
+  getAndDisplayFeedback();
+  selectDay();
+}
+
+$(handleFeedback)
+

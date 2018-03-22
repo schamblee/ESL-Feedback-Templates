@@ -6,14 +6,22 @@
 	<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css?family=Julius+Sans+One" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css?family=Overlock" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Julius+Sans+One" rel="stylesheet">
 </head>
   <header>
     <img src="http://pluspng.com/img-png/apple-png-apple-png-2040.png" class="logo"><h1>5-Apple Feedback</h1>
   </header>
 <body>
   <main>
-    <form>
+    <form class="dayForm">
+      	<label for="date">Date:</label>
+      	<input id="date" type="date" name="date">
+      	<button class="js-day" type="submit">Submit</button>
+    </form>
+    <form class="templateForm" aria-live="assertive" hidden>
       <fieldset>
+      	<label for="time">Time:</label>
+      	<input id="time" type="time" name="time"><br>
       	<label for="level">Level:</label>
       	<select id="level">
       	  <option value="preVIP">Pre-VIPKID</option>
@@ -67,9 +75,15 @@
       	<input type="text" name="student"><br>
         <input type="radio" name="gender" value="boy"> Boy
         <input type="radio" name="gender" value="girl"> Girl
+        <input type="radio" name="gender" value="girl"> Your Child
       </fieldset>
-      <button class="js-submit">Submit</button>
+      <button class="js-submit" type="submit">Add Feedback</button>
     </form>
+    <section class="js-output" aria-live="assertive" hidden>
+    </section>
+    <section class="feedbackControls" aria-live="assertive" hidden>
+    <button class="js-saveDay" type="submit">Save Day</button>
+    <button class="js-nextDay" type="submit">Next Day</button>
     <section role="region">
       <a href="/">Sign Out</a>
     </section>
