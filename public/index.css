@@ -2,6 +2,11 @@ html {
   font-family: 'Roboto', sans-serif;
 }
 
+body {
+  margin-left: 400px;
+  margin-right: 400px;
+}
+
 h1 {
   font-family: 'Julius Sans One', sans-serif;
   display: inline-block;

@@ -53,6 +53,7 @@ function getFeedback(callbackFn) {
 // this function stays the same when we connect
 // to real API later
 let student = 'Jerry'
+let pronoun = 'he'
 function displayFeedback(data) {
     for (index in data.feedbackTemplates) {
 	   $('.js-output').append(
