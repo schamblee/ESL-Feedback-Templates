@@ -28,10 +28,10 @@ describe('feedback page', function () {
   });
 });
 
-describe('register page', function () {
+describe('login page', function () {
   it('should exist', function () {
     return chai.request(app)
-      .get('/register')
+      .get('/login')
       .then(function (res) {
         expect(res).to.have.status(200);
       });
