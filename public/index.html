@@ -1,44 +1,146 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Five-Apple Feedback</title>
+  <!-- Standard Meta -->
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <!-- Site Properties -->
+  <title>5 Apple Feedback</title>
 	<link rel="stylesheet" type="text/css" href="index.css">
-	<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
-	<link href="https://fonts.googleapis.com/css?family=Julius+Sans+One" rel="stylesheet">
-	<link href="https://fonts.googleapis.com/css?family=Overlock" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="dist/semantic.min.css">
 </head>
-<body>
-  <header>
-    <img src="http://pluspng.com/img-png/apple-png-apple-png-2040.png" class="logo"><h1>5-Apple Feedback</h1>
-  </header>
-  <main>
-  	<div class="introduction">
-  	  <p>Welcome to 5-Apple Feedback! As an online English teacher for VIPKID, writing and submitting feedback can be a time-consuming task. However, the feedback you submit provides guidence and encouragement which will help your students continue their English-learning journeys.</p>
+<body class="pushable">
+<!-- Page Contents -->
+<main role="main" class="pusher">
 
-  	  <p>Great feedback is also vital to your successful bussiness as an online English teacher. Parents often say that quality feedback is one of the top reasons why they select a teacher for their child.</p>
-
-  	  <p>5-Apple Feedback is here to help you send helpful, detailed and accurate feedback in seconds.</p>
-
-  	  <ul>
-  	    <li>Save time and send excellent feedback to your students.</li>
-  	    <li>Help your students improve their English with detailed feedback.</li>
-  	    <li>Submit feedback in between classes with ease.</li>
-  	    <li>Avoid typos and grammatical errors.</li>
-  	    <li>Use easy-to-translate feedback templates which student's parents will appreciate.</li>
-  	    <li>Earn five-apple ratings and be your students' favorite teacher!</li>
-  	</div>
-    <form class="login">
-      <label for="username">Email:</label>
-      <input id="username" type="email" required><br>
-      <label for="password">Password:</label>
-      <input id="password" type="password" required><br>     
-  	  <a href="/feedback">Sign In</a>
-    </form>
-    <div class="register">
-      <label for="register">Don't have an account?</label>
-      <a href="/register"><button id="register">Sign Up</button></a>
+  <div class="ui fixed inverted menu">
+    <div class="ui container">
+      <a href="#" class="header item">
+        <img class="logo" src="https://freeiconshop.com/wp-content/uploads/edd/apple-flat-1.png">
+          &nbsp 5 Apple Feedback
+      </a>
+      <div class="right item">
+        <a href="/login" class="ui left attached green basic button">Log in</a>
+        <a ahref="#register" class="right attached ui green button">Sign Up</a>
+      </div>
     </div>
+  </div>
+  <div class="ui vertical masthead center aligned segment intro">
+    <div class="ui container">
+      <div class="ui large secondary pointing menu">
+        <a class="toc item">
+          <i class="sidebar icon"></i>
+        </a>
+      </div>
+    </div>
+    <div class="ui text container">
+      <h1 class="ui inverted header">
+        <img src="https://freeiconshop.com/wp-content/uploads/edd/apple-flat-1.png" class="ui circular image logo">
+        5 Apple Feedback
+      </h1>
+      <h2>Send detailed lesson feedback in seconds.</h2>
+      <a href="#register"><div class="ui huge green button">Get Started <i class="right arrow icon"></i></div></a><br>
+      
+    </div>
+  </div>
+
+  <div class="ui vertical stripe segment">
+    <div class="ui text container">
+      <h3 class="ui header">Welcome to 5 Apple Feedback!</h3>
+      <p>As an online English teacher for VIPKID, writing and submitting feedback can be a time-consuming task. However, the feedback you submit provides guidence and encouragement which will help your students continue their English-learning journeys.</p>
+
+      <p>Great feedback is also vital to your successful bussiness as an online English teacher. Parents often say that quality feedback is one of the top reasons why they select a teacher for their child.</p>
+      
+      <h4 class="ui horizontal header divider">
+        <a href="#">Learn More</a>
+      </h4>
+      <h3 class="ui header">Save time and help your students.</h3>
+          <ul class="ui list">
+            <li>Save time and send excellent feedback to your students.</li>
+            <li>Help your students improve their English with detailed feedback.</li>
+            <li>Submit feedback in between classes with ease.</li>
+            <li>Avoid typos and grammatical errors.</li>
+            <li>Use easy-to-translate feedback templates which student's parents will appreciate.</li>
+            <li>Earn five-apple ratings and be your students' favorite teacher!</li>
+          </ul>
+      </div> 
+            <h4 class="ui horizontal header divider">
+        
+      </h4>
+    <div id ="register" class="ui middle aligned center aligned grid">
+      <div class="column">
+        <h2 class="ui green image header">
+        <img src="https://freeiconshop.com/wp-content/uploads/edd/apple-flat-1.png" class="image">
+        <div class="content">
+        Create an Account
+        </div>
+        </h2>
+        <form class="ui large form error">
+          <div class="ui stacked segment">
+            <div class="field error">
+              <div class="ui left icon input">
+                <i class="user icon"></i>
+                <input type="text" name="email" placeholder="E-mail address">
+              </div>
+            </div>
+            <div class="field error">
+              <div class="ui left icon input">
+                <i class="lock icon"></i>
+                <input type="password" name="password" placeholder="Password">
+              </div>
+            </div>
+            <a href="/feedback"><div class="ui fluid large green submit button">Create Account</div></a>
+          </div>
+        </form>
+        <!--<div class="ui error message"><ul class="list"><li>Please enter your e-mail</li><li>Please enter a valid e-mail</li><li>Please enter your password</li><li>Your password must be at least 6 characters</li></ul>
+        </div>-->
+        
+        <div class="ui column message">
+          Already have an account? <a href="/register">Login</a>
+        </div>
+       </div>
+     </div>
+   </div>
+     
+<div class="ui inverted vertical footer segment">
+    <div class="ui container">
+      <div class="ui stackable inverted divided equal height stackable grid">
+        <div class="three wide column">
+          <!--
+          <h4 class="ui inverted header">About</h4>
+          <div class="ui inverted link list">
+            <a href="#" class="item">Sitemap</a>
+            <a href="#" class="item">Contact Us</a>
+            <a href="#" class="item">Religious Ceremonies</a>
+            <a href="#" class="item">Gazebo Plans</a>
+          </div>
+        -->
+        </div>
+        <div class="three wide column">
+          <!--
+          <h4 class="ui inverted header">Services</h4>
+          <div class="ui inverted link list">
+            <a href="#" class="item">Banana Pre-Order</a>
+            <a href="#" class="item">DNA FAQ</a>
+            <a href="#" class="item">How To Access</a>
+            <a href="#" class="item">Favorite X-Men</a>
+          </div>
+        -->
+        </div>
+        <div class="seven wide column">
+          <h4 class="ui inverted header">5 Apple Feedback</h4>
+          <p>5 Apple Feedback is here to help you send helpful, detailed and accurate feedback in seconds.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
   </main>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="dist/semantic.min.js"></script>
+  <script src="index.js"></script>
 </body>
+
+</html>
 </html>

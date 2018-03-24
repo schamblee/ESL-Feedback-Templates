@@ -17,8 +17,8 @@ app.get('/index', function(req, res) {
 	res.sendfile('./public/index.html'); 
 });
 
-app.get('/register', function(req, res) { 
-	res.sendfile('./public/register.html'); 
+app.get('/login', function(req, res) { 
+	res.sendfile('./public/login.html'); 
 });
 
 app.get('/feedback', function(req, res) { 
