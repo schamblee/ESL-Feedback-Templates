@@ -1,11 +1,99 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>ESL Feedback</title>
+	<title>Five-Apple Feedback</title>
+	<link rel="stylesheet" type="text/css" href="index.css">
+	<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Julius+Sans+One" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Overlock" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Julius+Sans+One" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.min.css" />
 </head>
+  <header>
+    <img src="http://pluspng.com/img-png/apple-png-apple-png-2040.png" class="logo"><h1>5-Apple Feedback</h1>
+  </header>
 <body>
-<h1>Feedback</h1>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-	<script type="text/javascript" src="index.js"></script>
+  <main>
+  	<div id="calendar"></div>
+    <form class="dayForm">
+      	<label for="date">Date:</label>
+      	<input id="date" type="date" name="date">
+      	<button class="js-day" type="submit">Submit</button>
+    </form>
+    <form class="templateForm">
+      <fieldset>
+      	<label for="student">Student Name:</label>
+      	<select id="student">
+      	  <option></option>
+      	  <option>Annie</option>
+      	  <option>Jerry</option>
+      	  <option>Kevin</option>
+      	  <option>Julia</option>
+      	</select> or
+      	<label for="new-name">New Name:</label>
+      	<input type="text" name="student"><br>
+        <input type="radio" name="gender" value="boy"> Boy
+        <input type="radio" name="gender" value="girl"> Girl
+        <input type="radio" name="gender" value="girl"> Child
+      </fieldset>
+      <fieldset>
+      	<label for="time">Enter Classroom Link:</label>
+      	<input id="time" type="text" name="classroom"><br>
+      	OR <br>Enter the lesson manually<br>
+      	<label for="level">Level:</label>
+      	<select id="level">
+      	  <option value="preVIP">Pre-VIPKID</option>
+      	  <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+      	</select>
+      	<label for="unit">Unit:</label>
+      	<select id="unit">
+      	  <option value="1">1</option>
+      	  <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+          <option value="8">8</option>
+          <option value="9">9</option>
+          <option value="10">10</option>
+          <option value="11">11</option>
+          <option value="12">12</option>
+      	</select>
+      	<label for="lesson">Lesson:</label>
+      	<select id="lesson">
+      	  <option value="1">1</option>
+      	  <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+          <option value="8">8</option>
+          <option value="9">9</option>
+          <option value="10">10</option>
+          <option value="11">11</option>
+          <option value="12">12</option>
+      	</select><br>
+     </fieldset>
+      <button class="js-submit" type="submit">Add Feedback</button>
+    </form>
+    <section class="js-output" aria-live="assertive" hidden>
+    </section>
+    <section class="feedbackControls" aria-live="assertive" hidden>
+    <button class="js-saveDay" type="submit">Save Day</button>
+    </section>
+    <section role="region">
+      <a href="/">Sign Out</a>
+    </section>
+  </main>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.21.0/moment.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+  <script type="text/javascript" src="index.js"></script>
 </body>
 </html>
