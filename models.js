@@ -3,6 +3,8 @@
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
+/*//USERS COLLECTION
+
 const usersSchema = mongoose.Schema({
   email: {type: String, required: true},
   password: { type: String, required: true},
@@ -20,7 +22,10 @@ usersSchema.methods.serialize = function() {
   };
 };
 
+//LESSONS COLLECTION
+
 const lessonsSchema = mongoose.Schema({
+  referenceId: {type: Number, required: true}, //located in the classroom URL on VIPKID
   code: {type: String, required: true},
   name: { type: String, required: true},
   templateId: {type: Number, required: true}
@@ -29,11 +34,14 @@ const lessonsSchema = mongoose.Schema({
 lessonsSchema.methods.serialize = function() {
   return {
     id: this._id,
+    referenceId: this.referenceId,
     code: this.code,
     name: this.name,
     templateId: this.templateId
   };
 };
+
+//STUDENTS COLLECTION
 
 const studentsSchema = mongoose.Schema({
   referenceId: {type: Number, required: false},
@@ -48,23 +56,25 @@ studentsSchema.methods.serialize = function() {
     userId: this.userId,
     name: this.name
   };
-};
+};*/
+
+//FEEDBACK TEMPLATES COLLECTION
 
 const feedbackTemplatesSchema = mongoose.Schema({
-  referenceId: {type: Number, required: false},
-  lessonId: { type: Number, required: false},
+  lessonId: { type: String, required: true},
   text: {type: String, required: true}
 });
 
 feedbackTemplatesSchema.methods.serialize = function() {
   return {
     id: this._id,
-    referenceId: this.referenceId,
     lessonId: this.lessonId,
     text: this.text
   };
 };
 
+//FEEDBACK COLLECTION
+/*
 const feedbackSchema = mongoose.Schema({
   lessonId: {type: Number, required: true},
   userId: { type: Number, required: true},
@@ -86,8 +96,23 @@ feedbackSchema.methods.serialize = function() {
 
 const Users = mongoose.model('Users', usersSchema);
 const Lessons = mongoose.model('Lessons', lessonsSchema);
-const Students = mongoose.model('Students', studentsSchema);
+const Students = mongoose.model('Students', studentsSchema);*/
 const FeedbackTemplates = mongoose.model('FeedbackTemplates', feedbackTemplatesSchema);
-const Feedback = mongoose.model('Feedback', feedbackTemplatesSchema);
+//const Feedback = mongoose.model('Feedback', feedbackSchema);
 
-module.exports = {Users};
+//module.exports = {Users};
+//module.exports = {Lessons};
+//module.exports = {Students};
+module.exports = {FeedbackTemplates}
+//module.exports = {Feedback}
+
+
+
+
+
+
+
+
+
+
+
