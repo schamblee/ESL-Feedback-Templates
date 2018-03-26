@@ -19,6 +19,18 @@ app.use(express.static('public'));
 app.use(morgan('common'));
 app.use(bodyParser.json());
 
+app.get('/index', function(req, res) { 
+	res.sendfile('./public/index.html'); 
+});
+
+app.get('/login', function(req, res) { 
+	res.sendfile('./public/login.html'); 
+});
+
+app.get('/feedback', function(req, res) { 
+	res.sendfile('./public/feedback.html'); 
+});
+
 
 //RETRIEVE ALL FEEDBACK TEMPLATES
 
@@ -163,17 +175,5 @@ function closeServer() {
 if (require.main === module) {
   runServer(DATABASE_URL).catch(err => console.error(err));
 }
-
-app.get('/index', function(req, res) { 
-	res.sendfile('./public/index.html'); 
-});
-
-app.get('/login', function(req, res) { 
-	res.sendfile('./public/login.html'); 
-});
-
-app.get('/feedback', function(req, res) { 
-	res.sendfile('./public/feedback.html'); 
-});
 
 module.exports = app;
