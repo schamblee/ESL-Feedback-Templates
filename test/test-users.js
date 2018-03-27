@@ -10,7 +10,7 @@ const mongoose = require('mongoose');
 const expect = chai.expect;
 
 const {Users} = require('../models-users');
-const {app, runServer, closeServer} = require('../server');
+const {app} = require('../server');
 const {TEST_DATABASE_URL} = require('../config');
 
 chai.use(chaiHttp);
