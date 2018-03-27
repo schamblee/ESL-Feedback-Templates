@@ -5,13 +5,13 @@ const chaiHttp = require('chai-http');
 const faker = require('faker');
 const mongoose = require('mongoose');
 
-// this makes the expect syntax available throughout
+// this makes the should syntax available throughout
 // this module
-const expect = chai.expect;
+const should = chai.should();
 
-const {User} = require('../models-users');
-const {app, runServer, closeServer} = require('../server');
-const {TEST_DATABASE_URL} = require('../config');
+const { BlogPost } = require('../models-users');
+const { closeServer, runServer, app } = require('../server');
+const { TEST_DATABASE_URL } = require('../config');
 
 chai.use(chaiHttp);
 
