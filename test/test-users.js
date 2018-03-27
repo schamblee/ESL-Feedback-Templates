@@ -15,239 +15,217 @@ const { TEST_DATABASE_URL } = require('../config');
 
 chai.use(chaiHttp);
 
+// this function deletes the entire database.
+// we'll call it in an `afterEach` block below
+// to ensure  ata from one test does not stick
+// around for next one
+function tearDownDb() {
+  return new Promise((resolve, reject) => {
+    console.warn('Deleting database');
+    mongoose.connection.dropDatabase()
+      .then(result => resolve(result))
+      .catch(err => reject(err));
+  });
+}
 
+
+// used to put randomish documents in db
+// so we have data to work with and assert about.
+// we use the Faker library to automatically
+// generate placeholder values for author, title, content
+// and then we insert that data into mongo
 function seedUserData() {
-  console.info('seeding user data');
+  console.info('seeding blog post data');
   const seedData = [];
-
-  for (let i=1; i<=10; i++) {
-    seedData.push(generateUserData());
+  for (let i = 1; i <= 10; i++) {
+    seedData.push({
+      email: faker.lorem.text(),
+      password: faker.lorem.text(),
+      closing: faker.lorem.text()
+    });
   }
   // this will return a promise
   return Users.insertMany(seedData);
 }
 
-// used to generate data to put in db
-function generateEmail() {
-  const emails = [
-    'Manhattan@gmail.com', 'Queens@gmail.com', 'Brooklyn@gmail.com', 'Bronx@gmail.com', 'StatenIsland@gmail.com'];
-  return emails[Math.floor(Math.random() * emails.length)];
-}
 
-// used to generate data to put in db
-function generatePassword() {
-  const passwords = ['C@tf1Sh', 'ThaiMah1000', 'Col_mole12#'];
-  return passwords[Math.floor(Math.random() * passwords.length)];
-}
+describe('Users API resource', function () {
 
-// used to generate data to put in db
-function generateClosing() {
-  const closings = ['Thanks for a great class!', '[name] earned 5 stars!', 'Great job, [name]!', 'Sincerely, Teacher Rebecca', 'Awesome work :)!!!'];
-  return closings[Math.floor(Math.random() * closings.length)];
-  };
-
-
-// generate an object represnting a user.
-// can be used to generate seed data for db
-// or request.body data
-function generateUserData() {
-  return {
-    name: faker.name.name(),
-    email: generateUsername(),
-    password: generatePassword(),
-    closing: generateClosing()
-  };
-}
-
-
-// this function deletes the entire database.
-// we'll call it in an `afterEach` block below
-// to ensure data from one test does not stick
-// around for next one
-function tearDownDb() {
-  console.warn('Deleting database');
-  return mongoose.connection.dropDatabase();
-}
-
-describe('Users API resource', function() {
-
-  // we need each of these hook functions to return a promise
-  // otherwise we'd need to call a `done` callback. `runServer`,
-  // `seedUserData` and `tearDownDb` each return a promise,
-  // so we return the value returned by these function calls.
-  before(function() {
+  before(function () {
     return runServer(TEST_DATABASE_URL);
   });
 
-  beforeEach(function() {
+  beforeEach(function () {
     return seedUserData();
   });
 
-  afterEach(function() {
+  afterEach(function () {
+    // tear down database so we ensure no state from this test
+    // effects any coming after.
     return tearDownDb();
   });
 
-  after(function() {
+  after(function () {
     return closeServer();
   });
 
   // note the use of nested `describe` blocks.
   // this allows us to make clearer, more discrete tests that focus
   // on proving something small
-  describe('GET endpoint', function() {
+  describe('GET endpoint', function () {
 
-    it('should return all existing users', function() {
+    it('should return all existing users', function () {
       // strategy:
-      //    1. get back all users returned by by GET request to `/users`
+      //    1. get back all posts returned by by GET request to `/posts`
       //    2. prove res has right status, data type
-      //    3. prove the number of users we got back is equal to number
+      //    3. prove the number of posts we got back is equal to number
       //       in db.
-      //
-      // need to have access to mutate and access `res` across
-      // `.then()` calls below, so declare it here so can modify in place
       let res;
       return chai.request(app)
         .get('/users')
-        .then(function(_res) {
-          // so subsequent .then blocks can access response object
+        .then(_res => {
           res = _res;
-          expect(res).to.have.status(200);
+          res.should.have.status(200);
           // otherwise our db seeding didn't work
-          expect(res.body.users).to.have.length.of.at.least(1);
+          res.body.should.have.length.of.at.least(1);
+
           return Users.count();
         })
-        .then(function(count) {
-          expect(res.body.users).to.have.length.of(count);
+        .then(count => {
+          // the number of returned posts should be same
+          // as number of posts in DB
+          res.body.should.have.length.of(count);
         });
     });
 
-
-    it('should return users with right fields', function() {
-      // Strategy: Get back all users, and ensure they have expected keys
+    it('should return users with right fields', function () {
+      // Strategy: Get back all posts, and ensure they have expected keys
 
       let resUsers;
       return chai.request(app)
         .get('/users')
-        .then(function(res) {
-          expect(res).to.have.status(200);
-          expect(res).to.be.json;
-          expect(res.body.users).to.be.a('array');
-          expect(res.body.users).to.have.length.of.at.least(1);
+        .then(function (res) {
 
-          res.body.users.forEach(function(user) {
-            expect(user).to.be.a('object');
-            expect(user).to.include.keys(
-              'id', 'email', 'password', 'closing', 'created');
+          res.should.have.status(200);
+          res.should.be.json;
+          res.body.should.be.a('array');
+          res.body.should.have.length.of.at.least(1);
+
+          res.body.forEach(function (post) {
+            users.should.be.a('object');
+            users.should.include.keys('id', 'email', 'password', 'closing', 'created');
           });
-          resUser= res.body.users[0];
-          return User.findById(resuser.id);
+          // just check one of the posts that its values match with those in db
+          // and we'll assume it's true for rest
+          resUsers = res.body[0];
+          return BlogPost.findById(resUsers.id);
         })
-        .then(function(user) {
-          expect(resUser.id).to.equal(user.id);
-          expect(resUser.email).to.equal(user.email);
-          expect(resUser.password).to.equal(user.password);
-          expect(resUser.closing).to.equal(user.closing);
-          expect(resUser.created).to.contain(user.created);
+        .then(user => {
+          resUsers.title.should.equal(users.title);
+          resUsers.content.should.equal(users.content);
+          resUsers.author.should.equal(users.authorName);
         });
     });
   });
 
-  describe('POST endpoint', function() {
+  describe('POST endpoint', function () {
     // strategy: make a POST request with data,
-    // then prove that the user we get back has
+    // then prove that the post we get back has
     // right keys, and that `id` is there (which means
     // the data was inserted into db)
-    it('should add a new user', function() {
+    it('should add a new users', function () {
 
-      const newUser = generateUserData();
-      let mostRecentGrade;
+      const newUsers = {
+        email: faker.lorem.text(),
+        password: faker.lorem.text(),
+        closing: faker.lorem.text()
+      };
 
       return chai.request(app)
         .post('/users')
-        .send(newUser)
-        .then(function(res) {
-          expect(res).to.have.status(201);
-          expect(res).to.be.json;
-          expect(res.body).to.be.a('object');
-          expect(res.body).to.include.keys(
+        .send(newUsers)
+        .then(function (res) {
+          res.should.have.status(201);
+          res.should.be.json;
+          res.body.should.be.a('object');
+          res.body.should.include.keys(
             'id', 'email', 'password', 'closing', 'created');
-          expect(res.body.email).to.equal(newUsers.email);
+          res.body.email.should.equal(newUsers.email);
           // cause Mongo should have created id on insertion
-          expect(res.body.id).to.not.be.null;
-          expect(res.body.password).to.equal(newUser.password);
-          expect(res.body.closing).to.equal(newUser.closing);
-          expect(res.body.created).to.not.be.null;
-          return User.findById(res.body.id);
+          res.body.id.should.not.be.null;
+          res.body.password.should.equal(newUsers.password);
+          res.body.closing.should.equal(newUsers.closing);
+          return Users.findById(res.body.id);
         })
-        .then(function(user) {
-          expect(user.email).to.equal(newUser.email);
-          expect(user.password).to.equal(newUser.password);
-          expect(user.closing).to.equal(newUser.closing);
-          expect(user.created).to.equal(newUser.created);
+        .then(function (users) {
+          users.title.should.equal(newUsers.title);
+          users.content.should.equal(newUsers.content);
+          users.author.firstName.should.equal(newUsers.author.firstName);
+          users.author.lastName.should.equal(newUsers.author.lastName);
         });
     });
   });
 
-  describe('PUT endpoint', function() {
+  describe('PUT endpoint', function () {
 
     // strategy:
-    //  1. Get an existing user from db
-    //  2. Make a PUT request to update that user
-    //  3. Prove user returned by request contains data we sent
-    //  4. Prove user in db is correctly updated
-    it('should update fields you send over', function() {
+    //  1. Get an existing post from db
+    //  2. Make a PUT request to update that post
+    //  4. Prove post in db is correctly updated
+    it('should update fields you send over', function () {
       const updateData = {
-        email: 'fofofofofofofof@ymail.com',
-        password: 'abcd1234',
-        closing: 'futuristic fusion'
+        email: 'cats cats cats',
+        passwordt: 'dogs dogs dogs',
+        closing: 'hello'
       };
 
-      return User
+      return Users
         .findOne()
-        .then(function(user) {
-          updateData.id = user.id;
+        .then(post => {
+          updateData.id = users.id;
 
-          // make request then inspect it to make sure it reflects
-          // data we sent
           return chai.request(app)
-            .put(`/users/${user.id}`)
+            .put(`/users/${users.id}`)
             .send(updateData);
         })
-        .then(function(res) {
-          expect(res).to.have.status(204);
-
-          return User.findById(updateData.id);
+        .then(res users
+          res.should.have.status(204);
+          return Users.findById(updateData.id);
         })
-        .then(function(User) {
-          expect(user.email).to.equal(updateData.email);
-          expect(user.password).to.equal(updateData.password);
-          expect(user.closing).to.equal(updateData.closing);
+        .then(users => {
+          users.email.should.equal(updateData.email);
+          users.password.should.equal(updateData.password);
+          users.closing.firstName.should.equal(updateData.author.closing);
         });
     });
   });
 
-  describe('DELETE endpoint', function() {
+  describe('DELETE endpoint', function () {
     // strategy:
-    //  1. get a user
-    //  2. make a DELETE request for that user's id
+    //  1. get a post
+    //  2. make a DELETE request for that post's id
     //  3. assert that response has right status code
-    //  4. prove that user with the id doesn't exist in db anymore
-    it('delete a user by id', function() {
+    //  4. prove that post with the id doesn't exist in db anymore
+    it('should delete a post by id', function () {
 
-      let user;
+      let users;
 
-      return User
+      return Users
         .findOne()
-        .then(function(_user) {
-          user = _user;
-          return chai.request(app).delete(`/users/${user.id}`);
+        .then(_users => {
+          users = _users;
+          return chai.request(app).delete(`/users/${users.id}`);
         })
-        .then(function(res) {
-          expect(res).to.have.status(204);
-          return User.findById(user.id);
+        .then(res => {
+          res.should.have.status(204);
+          return Blogusers.findById(users.id);
         })
-        .then(function(_user) {
-          expect(_user).to.be.null;
+        .then(_users => {
+          // when a variable's value is null, chaining `should`
+          // doesn't work. so `_post.should.be.null` would raise
+          // an error. `should.be.null(_post)` is how we can
+          // make assertions about a null value.
+          should.not.exist(_users);
         });
     });
   });
