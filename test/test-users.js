@@ -100,7 +100,7 @@ describe('Users API resource', function() {
       // strategy:
       //    1. get back all users returned by by GET request to `/users`
       //    2. prove res has right status, data type
-      //    3. prove the number of restaurants we got back is equal to number
+      //    3. prove the number of users we got back is equal to number
       //       in db.
       //
       // need to have access to mutate and access `res` across
@@ -123,7 +123,7 @@ describe('Users API resource', function() {
 
 
     it('should return users with right fields', function() {
-      // Strategy: Get back all restaurants, and ensure they have expected keys
+      // Strategy: Get back all users, and ensure they have expected keys
 
       let resUsers;
       return chai.request(app)
@@ -134,15 +134,15 @@ describe('Users API resource', function() {
           expect(res.body.users).to.be.a('array');
           expect(res.body.users).to.have.length.of.at.least(1);
 
-          res.body.users.forEach(function(restaurant) {
+          res.body.users.forEach(function(user) {
             expect(user).to.be.a('object');
             expect(user).to.include.keys(
               'id', 'email', 'password', 'closing', 'created');
           });
-          resRestaurant = res.body.restaurants[0];
-          return Restaurant.findById(resRestaurant.id);
+          resUser= res.body.users[0];
+          return User.findById(resuser.id);
         })
-        .then(function(restaurant) {
+        .then(function(user) {
           expect(resUser.id).to.equal(user.id);
           expect(resUser.email).to.equal(user.email);
           expect(resUser.password).to.equal(user.password);
@@ -154,10 +154,10 @@ describe('Users API resource', function() {
 
   describe('POST endpoint', function() {
     // strategy: make a POST request with data,
-    // then prove that the restaurant we get back has
+    // then prove that the user we get back has
     // right keys, and that `id` is there (which means
     // the data was inserted into db)
-    it('should add a new restaurant', function() {
+    it('should add a new user', function() {
 
       const newUser = generateUserData();
       let mostRecentGrade;
@@ -191,10 +191,10 @@ describe('Users API resource', function() {
   describe('PUT endpoint', function() {
 
     // strategy:
-    //  1. Get an existing restaurant from db
-    //  2. Make a PUT request to update that restaurant
-    //  3. Prove restaurant returned by request contains data we sent
-    //  4. Prove restaurant in db is correctly updated
+    //  1. Get an existing user from db
+    //  2. Make a PUT request to update that user
+    //  3. Prove user returned by request contains data we sent
+    //  4. Prove user in db is correctly updated
     it('should update fields you send over', function() {
       const updateData = {
         email: 'fofofofofofofof@ymail.com',
@@ -228,11 +228,11 @@ describe('Users API resource', function() {
 
   describe('DELETE endpoint', function() {
     // strategy:
-    //  1. get a restaurant
-    //  2. make a DELETE request for that restaurant's id
+    //  1. get a user
+    //  2. make a DELETE request for that user's id
     //  3. assert that response has right status code
-    //  4. prove that restaurant with the id doesn't exist in db anymore
-    it('delete a restaurant by id', function() {
+    //  4. prove that user with the id doesn't exist in db anymore
+    it('delete a user by id', function() {
 
       let user;
 
