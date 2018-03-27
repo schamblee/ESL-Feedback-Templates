@@ -45,7 +45,7 @@ function generateClosing() {
   const closings = ['Thanks for a great class!', '[name] earned 5 stars!', 'Great job, [name]!', 'Sincerely, Teacher Rebecca', 'Awesome work :)!!!'];
   return closings[Math.floor(Math.random() * closings.length)];
   };
-}
+
 
 // generate an object represnting a user.
 // can be used to generate seed data for db
