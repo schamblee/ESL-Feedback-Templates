@@ -21,7 +21,7 @@ function seedUserData() {
   const seedData = [];
 
   for (let i=1; i<=10; i++) {
-    seedData.push(generateRestaurantData());
+    seedData.push(generateUserData());
   }
   // this will return a promise
   return Users.insertMany(seedData);
@@ -73,7 +73,7 @@ describe('Users API resource', function() {
 
   // we need each of these hook functions to return a promise
   // otherwise we'd need to call a `done` callback. `runServer`,
-  // `seedRestaurantData` and `tearDownDb` each return a promise,
+  // `seedUserData` and `tearDownDb` each return a promise,
   // so we return the value returned by these function calls.
   before(function() {
     return runServer(TEST_DATABASE_URL);
