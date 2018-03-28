@@ -7,6 +7,10 @@ h2 {
   color: white;
 }
 
+#login {
+  margin-top: 50px;
+}
+
 .ui.vertical.segment.intro {
     background-image: url('https://ak4.picdn.net/shutterstock/videos/1007071684/thumb/12.jpg?i10c=img.resize(height:160)');
     background-repeat: no-repeat;
