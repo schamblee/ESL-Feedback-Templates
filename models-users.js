@@ -3,8 +3,6 @@
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
-
-
 const usersSchema = mongoose.Schema({
   email: {type: String, required: true},
   password: { type: String, required: true},
@@ -22,10 +20,7 @@ usersSchema.methods.serialize = function() {
   };
 };
 
-
-
 const Users = mongoose.model('Users', usersSchema);
-
 module.exports = {Users};
 
 

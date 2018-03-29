@@ -1,4 +1,4 @@
-/*'use strict';
+'use strict';
 
 const chai = require('chai');
 const chaiHttp = require('chai-http');
@@ -52,7 +52,7 @@ function seedUserData() {
 describe('Users API resource', function () {
 
   before(function () {
-    return runServer(TEST_DATABASE_URL);
+    return runServer(TEST_DATABASE_URL, 1234);
   });
 
   beforeEach(function () {
@@ -76,9 +76,9 @@ describe('Users API resource', function () {
 
     it('should return all existing users', function () {
       // strategy:
-      //    1. get back all posts returned by by GET request to `/posts`
+      //    1. get back all users returned by by GET request to `/users`
       //    2. prove res has right status, data type
-      //    3. prove the number of posts we got back is equal to number
+      //    3. prove the number of users we got back is equal to number
       //       in db.
       let res;
       return chai.request(app)
@@ -92,14 +92,18 @@ describe('Users API resource', function () {
           return Users.count();
         })
         .then(count => {
-          // the number of returned posts should be same
-          // as number of posts in DB
+          // the number of returned users should be same
+          // as number of users in DB
           res.body.should.have.length.of(count);
-        });
+        })
+        .catch(function (err) {
+          throw err
+          })
+        }
     });
 
     it('should return users with right fields', function () {
-      // Strategy: Get back all posts, and ensure they have expected keys
+      // Strategy: Get back all users, and ensure they have expected keys
 
       let resUsers;
       return chai.request(app)
@@ -111,14 +115,14 @@ describe('Users API resource', function () {
           res.body.should.be.a('array');
           res.body.should.have.length.of.at.least(1);
 
-          res.body.forEach(function (post) {
+          res.body.forEach(function (user) {
             users.should.be.a('object');
             users.should.include.keys('id', 'email', 'password', 'closing', 'created');
           });
-          // just check one of the posts that its values match with those in db
+          // just check one of the users that its values match with those in db
           // and we'll assume it's true for rest
           resUsers = res.body[0];
-          return BlogPost.findById(resUsers.id);
+          return User.findById(resUsers.id);
         })
         .then(user => {
           resUsers.title.should.equal(users.title);
@@ -130,7 +134,7 @@ describe('Users API resource', function () {
 
   describe('POST endpoint', function () {
     // strategy: make a POST request with data,
-    // then prove that the post we get back has
+    // then prove that the user we get back has
     // right keys, and that `id` is there (which means
     // the data was inserted into db)
     it('should add a new users', function () {
@@ -169,9 +173,9 @@ describe('Users API resource', function () {
   describe('PUT endpoint', function () {
 
     // strategy:
-    //  1. Get an existing post from db
-    //  2. Make a PUT request to update that post
-    //  4. Prove post in db is correctly updated
+    //  1. Get an existing user from db
+    //  2. Make a PUT request to update that user
+    //  4. Prove puserin db is correctly updated
     it('should update fields you send over', function () {
       const updateData = {
         email: 'cats cats cats',
@@ -202,10 +206,10 @@ describe('Users API resource', function () {
 
   describe('DELETE endpoint', function () {
     // strategy:
-    //  1. get a post
-    //  2. make a DELETE request for that post's id
+    //  1. get a user
+    //  2. make a DELETE request for that user's id
     //  3. assert that response has right status code
-    //  4. prove that post with the id doesn't exist in db anymore
+    //  4. prove that user with the id doesn't exist in db anymore
     it('should delete a user by id', function () {
 
       let users;
@@ -222,8 +226,8 @@ describe('Users API resource', function () {
         })
         .then(_users => {
           // when a variable's value is null, chaining `should`
-          // doesn't work. so `_post.should.be.null` would raise
-          // an error. `should.be.null(_post)` is how we can
+          // doesn't work. so `_user.should.be.null` would raise
+          // an error. `should.be.null(_user)` is how we can
           // make assertions about a null value.
           should.not.exist(_users);
         });
@@ -231,4 +235,3 @@ describe('Users API resource', function () {
   });
 });
 
-*/

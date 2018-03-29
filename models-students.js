@@ -3,7 +3,6 @@
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
-
 const studentsSchema = mongoose.Schema({
   referenceId: {type: String, required: false},
   userId: { type: String, required: true},

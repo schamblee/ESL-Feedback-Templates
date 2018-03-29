@@ -22,10 +22,7 @@ feedbackSchema.methods.serialize = function() {
   };
 };
 
-
 const Feedback = mongoose.model('Feedback', feedbackSchema);
-
-
 module.exports = {Feedback}
 
 

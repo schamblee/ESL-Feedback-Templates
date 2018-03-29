@@ -3,7 +3,6 @@
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
-
 const lessonsSchema = mongoose.Schema({
   referenceId: {type: String, required: true}, //located in the classroom URL on VIPKID
   code: {type: String, required: true},
