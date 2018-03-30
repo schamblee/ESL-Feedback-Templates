@@ -7,7 +7,7 @@ const lessonsSchema = mongoose.Schema({
   referenceId: {type: String, required: true}, //located in the classroom URL on VIPKID
   code: {type: String, required: true},
   name: { type: String, required: true},
-  templateId: {type: Number, required: true}
+  templateId: {type: String, required: true}
 });
 
 lessonsSchema.methods.serialize = function() {
@@ -22,15 +22,3 @@ lessonsSchema.methods.serialize = function() {
 
 const Lessons = mongoose.model('Lessons', lessonsSchema);
 module.exports = {Lessons};
-
-
-
-
-
-
-
-
-
-
-
-
