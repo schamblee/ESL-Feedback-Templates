@@ -4,10 +4,11 @@ const chai = require('chai');
 const chaiHttp = require('chai-http');
 const faker = require('faker');
 const mongoose = require('mongoose');
-
+mongoose.Promise = global.Promise;
 // this makes the should syntax available throughout
 // this module
 const should = chai.should();
+const expect = chai.expect
 
 const { Users } = require('../models-users');
 const { closeServer, runServer, app } = require('../server');
@@ -35,17 +36,19 @@ function tearDownDb() {
 // generate placeholder values for author, title, content
 // and then we insert that data into mongo
 function seedUserData() {
-  console.info('seeding blog post data');
+  console.info('seeding users data');
   const seedData = [];
   for (let i = 1; i <= 10; i++) {
     seedData.push({
-      email: faker.lorem.text(),
-      password: faker.lorem.text(),
-      closing: faker.lorem.text()
+      email: faker.internet.email(),
+      password: faker.lorem.words(),
+      closing: faker.lorem.words(),
+      created: faker.date.past()
     });
-  }
+
   // this will return a promise
   return Users.insertMany(seedData);
+  }
 }
 
 
@@ -62,73 +65,37 @@ describe('Users API resource', function () {
   afterEach(function () {
     // tear down database so we ensure no state from this test
     // effects any coming after.
-    return tearDownDb();
+  //  return tearDownDb();
   });
 
   after(function () {
     return closeServer();
   });
 
-  // note the use of nested `describe` blocks.
-  // this allows us to make clearer, more discrete tests that focus
-  // on proving something small
   describe('GET endpoint', function () {
 
     it('should return all existing users', function () {
       // strategy:
-      //    1. get back all users returned by by GET request to `/users`
+      //    1. get back all users returned by by GET request to `/api/users`
       //    2. prove res has right status, data type
       //    3. prove the number of users we got back is equal to number
       //       in db.
       let res;
       return chai.request(app)
-        .get('/users')
+        .get('/api/users')
         .then(_res => {
           res = _res;
           res.should.have.status(200);
           // otherwise our db seeding didn't work
-          res.body.should.have.length.of.at.least(1);
+          res.body.users.should.have.length.of.at.least(1);
 
           return Users.count();
         })
         .then(count => {
           // the number of returned users should be same
           // as number of users in DB
-          res.body.should.have.length.of(count);
+          expect(res.body.users).to.have.lengthOf(count);
         })
-        .catch(function (err) {
-          throw err
-          })
-        }
-    });
-
-    it('should return users with right fields', function () {
-      // Strategy: Get back all users, and ensure they have expected keys
-
-      let resUsers;
-      return chai.request(app)
-        .get('/users')
-        .then(function (res) {
-
-          res.should.have.status(200);
-          res.should.be.json;
-          res.body.should.be.a('array');
-          res.body.should.have.length.of.at.least(1);
-
-          res.body.forEach(function (user) {
-            users.should.be.a('object');
-            users.should.include.keys('id', 'email', 'password', 'closing', 'created');
-          });
-          // just check one of the users that its values match with those in db
-          // and we'll assume it's true for rest
-          resUsers = res.body[0];
-          return User.findById(resUsers.id);
-        })
-        .then(user => {
-          resUsers.title.should.equal(users.title);
-          resUsers.content.should.equal(users.content);
-          resUsers.author.should.equal(users.authorName);
-        });
     });
   });
 
@@ -146,31 +113,27 @@ describe('Users API resource', function () {
       };
 
       return chai.request(app)
-        .post('/users')
+        .post('/api/users')
         .send(newUsers)
         .then(function (res) {
           res.should.have.status(201);
           res.should.be.json;
           res.body.should.be.a('object');
-          res.body.should.include.keys(
-            'id', 'email', 'password', 'closing', 'created');
+          res.body.should.include.keys("created", "email", "id", "password");
           res.body.email.should.equal(newUsers.email);
           // cause Mongo should have created id on insertion
           res.body.id.should.not.be.null;
           res.body.password.should.equal(newUsers.password);
-          res.body.closing.should.equal(newUsers.closing);
           return Users.findById(res.body.id);
         })
         .then(function (users) {
-          users.title.should.equal(newUsers.title);
-          users.content.should.equal(newUsers.content);
-          users.author.firstName.should.equal(newUsers.author.firstName);
-          users.author.lastName.should.equal(newUsers.author.lastName);
+          users.email.should.equal(newUsers.email);
+          users.password.should.equal(newUsers.password);
         });
     });
   });
 
-  describe('PUT endpoint', function () {
+describe('PUT endpoint', function () {
 
     // strategy:
     //  1. Get an existing user from db
@@ -179,7 +142,7 @@ describe('Users API resource', function () {
     it('should update fields you send over', function () {
       const updateData = {
         email: 'cats cats cats',
-        passwordt: 'dogs dogs dogs',
+        password: 'dogs dogs dogs',
         closing: 'hello'
       };
 
@@ -189,7 +152,7 @@ describe('Users API resource', function () {
           updateData.id = users.id;
 
           return chai.request(app)
-            .put(`/users/${users.id}`)
+            .put(`/api/users/${users.id}`)
             .send(updateData);
         })
         .then(res => {
@@ -199,7 +162,7 @@ describe('Users API resource', function () {
         .then(users => {
           users.email.should.equal(updateData.email);
           users.password.should.equal(updateData.password);
-          users.closing.firstName.should.equal(updateData.author.closing);
+          users.closing.should.equal(updateData.closing);
         });
     });
   });
@@ -218,11 +181,11 @@ describe('Users API resource', function () {
         .findOne()
         .then(_users => {
           users = _users;
-          return chai.request(app).delete(`/users/${users.id}`);
+          return chai.request(app).delete(`/api/users/${users.id}`);
         })
         .then(res => {
           res.should.have.status(204);
-          return Blogusers.findById(users.id);
+          return Users.findById(users.id);
         })
         .then(_users => {
           // when a variable's value is null, chaining `should`
@@ -234,4 +197,6 @@ describe('Users API resource', function () {
     });
   });
 });
+
+
 

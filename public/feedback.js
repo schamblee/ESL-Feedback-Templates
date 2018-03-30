@@ -13,7 +13,7 @@ let userClosing = 'Thanks for another great lesson and if you enjoyed the lesson
 // use jQuery's AJAX functionality to make a call
 // to the server and then run the callbackFn 
 function getFeedback(callbackFn) {
-  $.getJSON(`http://localhost:8080/api/feedbackTemplates/`, callbackFn);
+  $.getJSON(`http://localhost:8080/api/feedbackTemplates/5abd5bcbc835fa1568861076`, callbackFn);
 }
 
 
@@ -30,12 +30,11 @@ function getFeedback(callbackFn) {
 let student = 'Jerry'
 let pronoun = 'he'
 function displayFeedback(data) {
-    for (index in data.feedbackTemplates) {
 	   $('.js-output').append(
         `<form class="ui form feedbackTemplate">
           <div class="field">
-            <label>${student} ${data.feedbackTemplates[index].id}</label>
-            <textarea id="feedback-input" class="ui action input feedback-input">${data.feedbackTemplates[index].text.replace(/-name-/i,`${student}`)}
+            <label>${student} ${data.id}</label>
+            <textarea id="feedback-input" class="ui action input feedback-input">${data.text.replace(/-name-/i,`${student}`)}
             ${userClosing}</textarea><br>
           </div>
           <button class="ui green right labeled icon button copyFeedback" onclick="copyFeedback()">
@@ -45,8 +44,7 @@ function displayFeedback(data) {
           <button class="ui blue button saveFeedback">Save Feedback</button>
           <button class="ui red button deleteFeedback">Delete Feedback</button>
          </form>`);
-    }
-}
+  }
 
 
 
@@ -78,14 +76,14 @@ function watchSaveFeedbackClick() {
   $('js-output').on('click', '.saveFeedback', function(event) {
     event.preventDefault();
     console.log("save feedback");
-    $.post("http://localhost:8080/api/feedback/",
+    $.post("http://localhost:8080/api/feedback",
     {
-        lessonId: $('#classroom-url').val(),
-        text: $('.feedback-input').val()
+        lessonId: 'abc', //$('#classroom-url').val(),
+        userId: '123abc',
+        studentId: 'cat', //$('#student').val(),
+        text: 'test test'//$('.feedback-input').val()
     },
-    function(data, status){
-        alert("Data: " + data + "\nStatus: " + status);
-    });
+    console.log('it worked'));
   });
 }
 
