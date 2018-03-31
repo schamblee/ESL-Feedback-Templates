@@ -12,7 +12,7 @@
   <link rel="stylesheet" type="text/css" href="dist/semantic.min.css">
 </head>
 
-<body class="pushable">
+<main role="main" class="pushable">
 <!-- Page Contents -->
 <div class="pusher">
 
@@ -35,34 +35,66 @@
         Log-in to your account
         </div>
         </h2>
-        <form class="ui large form error">
+        <form id="logIn" class="ui large form"> 
           <div class="ui stacked segment">
-            <div class="field error">
+            <div id="usernameField" class="field">
               <div class="ui left icon input">
                 <i class="user icon"></i>
-                <input type="text" name="email" placeholder="E-mail address">
+                <input id="username" type="text" name="username" placeholder="Username">
               </div>
             </div>
-            <div class="field error">
+            <div id="passwordField" class="field">
               <div class="ui left icon input">
                 <i class="lock icon"></i>
-                <input type="password" name="password" placeholder="Password">
+                <input id="password" type="password" name="password" placeholder="Password">
               </div>
             </div>
-            <a href="/feedback"><div class="ui fluid large green submit button">Login</div></a>
-          </div>
-
-          <div class="ui error message"><ul class="list"><li>Please enter your e-mail</li><li>Please enter a valid e-mail</li><li>Please enter your password</li><li>Your password must be at least 6 characters</li></ul>
+            <button class="ui fluid large green submit button">Login</button>
           </div>
         </form>
+        <div id="login-errors"></div>
         <div class="ui column message">
-          New to us? <a href="/register">Sign Up</a>
+          New to us? <a href="/#register">Sign Up</a>
         </div>
        </div>
      </div>
+   </div>
+     <div class="ui inverted vertical footer segment">
+    <div class="ui container">
+      <div class="ui stackable inverted divided equal height stackable grid">
+        <div class="three wide column">
+          <!--
+          <h4 class="ui inverted header">About</h4>
+          <div class="ui inverted link list">
+            <a href="#" class="item">Sitemap</a>
+            <a href="#" class="item">Contact Us</a>
+            <a href="#" class="item">Religious Ceremonies</a>
+            <a href="#" class="item">Gazebo Plans</a>
+          </div>
+        -->
+        </div>
+        <div class="three wide column">
+          <!--
+          <h4 class="ui inverted header">Services</h4>
+          <div class="ui inverted link list">
+            <a href="#" class="item">Banana Pre-Order</a>
+            <a href="#" class="item">DNA FAQ</a>
+            <a href="#" class="item">How To Access</a>
+            <a href="#" class="item">Favorite X-Men</a>
+          </div>
+        -->
+        </div>
+        <div class="seven wide column">
+          <h4 class="ui inverted header">5 Apple Feedback</h4>
+          <p>5 Apple Feedback is here to help you send detailed ESL feedback in seconds.</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="dist/semantic.min.js"></script>
-  <script src="index.js"></script>
+  <script src="login.js"></script>
 </body>
 
 </html>

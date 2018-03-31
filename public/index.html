@@ -22,7 +22,7 @@
       </a>
       <div class="right item">
         <a href="/login" class="ui left attached green basic button">Log in</a>
-        <a ahref="#register" class="right attached ui green button">Sign Up</a>
+        <a href="#register" class="right attached ui green button">Sign Up</a>
       </div>
     </div>
   </div>
@@ -39,7 +39,7 @@
         <img src="https://freeiconshop.com/wp-content/uploads/edd/apple-flat-1.png" class="ui circular image logo">
         5 Apple Feedback
       </h1>
-      <h2>Send detailed lesson feedback in seconds.</h2>
+      <h2>Send detailed ESL lesson feedback in seconds.</h2>
       <a href="#register"><div class="ui huge green button">Get Started <i class="right arrow icon"></i></div></a><br>
       
     </div>
@@ -48,14 +48,14 @@
   <div class="ui vertical stripe segment">
     <div class="ui text container">
       <h3 class="ui header">Welcome to 5 Apple Feedback</h3>
-      <p>As an online English teacher, writing and submitting feedback can be a time-consuming task. However, the feedback you submit provides guidence and encouragement which will help your students continue their English-learning journeys.</p>
+      <p>As an online English teacher for <a href="https://t.vipkid.com.cn/activity/popup?refereeId=4057772&refersourceid=a01">VIPKID</a>, writing and submitting feedback can be a time-consuming task. However, the feedback you submit provides guidence and encouragement which will help your students continue their English-learning journeys.</p>
 
       <p>Great feedback is also vital to your successful bussiness as an online English teacher. Parents often say that quality feedback is one of the top reasons why they select a teacher for their child.</p>
       
       <h4 class="ui horizontal header divider">
         <img class="logo" src="https://freeiconshop.com/wp-content/uploads/edd/apple-flat-1.png">
       </h4>
-      <h3 class="ui header">Save time and help your students.</h3>
+      <h3 class="ui header">Save time and help your students learn English.</h3>
           <ul class="ui list">
             <li>Save time and send excellent feedback to your students.</li>
             <li>Help your students improve their English with detailed feedback.</li>
@@ -65,37 +65,39 @@
             <li>Earn five-apple ratings and be your students' favorite teacher!</li>
           </ul>
       </div> 
-            <h4 class="ui horizontal header divider">
+      <h4 class="ui horizontal header divider">
         
       </h4>
-    <div id ="register" class="ui middle aligned center aligned grid">
+    <div id="register" class="ui middle aligned center aligned grid register">
       <div class="column">
         <h2 class="ui green image header">
-        <img src="https://freeiconshop.com/wp-content/uploads/edd/apple-flat-1.png" class="image">
+        <img src="https://freeiconshop.com/wp-content/uploads/edd/apple-flat-1.png" class="ui small image">
         <div class="content">
         Create an Account
         </div>
         </h2>
-        <form class="ui large form error">
-          <div class="ui stacked segment">
-            <div class="field error">
-              <div class="ui left icon input">
-                <i class="user icon"></i>
-                <input type="text" name="email" placeholder="E-mail address">
+        <form id="registerForm" class="ui large form error">
+          <div class="ui stacked segment left aligned">
+            <div class="field">
+              <div id="usernameField" class="field">
+                <label>Username</label>
+                <input id="username" type="text" placeholder="Username" required>
+              </div>
+              <div id="emailField" class="field">
+                <label class="left">Email</label>
+                <input id="email" type="email" placeholder="Email Address" required>
+              </div>
+              <div id="passwordField" class="field">
+                <label class="left">Password</label>
+                <input id="password" type="password" placeholder="Password" required>
               </div>
             </div>
-            <div class="field error">
-              <div class="ui left icon input">
-                <i class="lock icon"></i>
-                <input type="password" name="password" placeholder="Password">
-              </div>
-            </div>
-            <a href="/feedback"><div class="ui fluid large green submit button">Create Account</div></a>
+            <button type="submit" class="ui fluid large green submit button">
+            Create Account
+            </button>
           </div>
         </form>
-        <!--<div class="ui error message"><ul class="list"><li>Please enter your e-mail</li><li>Please enter a valid e-mail</li><li>Please enter your password</li><li>Your password must be at least 6 characters</li></ul>
-        </div>-->
-        
+        <div id="registration-errors"></div>
         <div class="ui column message">
           Already have an account? <a href="/login">Login</a>
         </div>
@@ -130,7 +132,7 @@
         </div>
         <div class="seven wide column">
           <h4 class="ui inverted header">5 Apple Feedback</h4>
-          <p>5 Apple Feedback is here to help you send helpful, detailed and accurate feedback in seconds.</p>
+          <p>5 Apple Feedback is here to help you send detailed ESL feedback in seconds.</p>
         </div>
       </div>
     </div>

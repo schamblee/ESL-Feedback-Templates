@@ -1,4 +1,6 @@
-
+$(document).ready(function(){
+                $('.ui.accordion').accordion();
+             });
 
 
 // this is mock data, but when we create our API

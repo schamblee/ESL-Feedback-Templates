@@ -1,23 +1,29 @@
 'use strict';
 
+require('dotenv').config();
 const bodyParser = require('body-parser');
 const express = require('express');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
+const passport = require('passport');
 const { PORT, DATABASE_URL } = require('./config');
 mongoose.Promise = global.Promise;
 
-const { Users } = require('./models-users');
 const { Lessons } = require('./models-lessons');
 const { Students } = require('./models-students');
 const { FeedbackTemplates } = require('./models-feedbackTemplates');
 const { Feedback } = require('./models-feedback');
+
+const { router: usersRouter } = require('./users');
+const { router: authRouter, localStrategy, jwtStrategy } = require('./auth');
 
 const app = express();
 
 app.use(express.static('public'));
 app.use(morgan('common'));
 app.use(bodyParser.json());
+
+//ROUTES
 
 app.get('/index', function(req, res) { 
 	res.sendfile('./public/index.html'); 
@@ -32,96 +38,33 @@ app.get('/feedback', function(req, res) {
 });
 
 
-//RETRIEVE ALL FEEDBACK TEMPLATES
-
-app.get('/api/users', (req, res) => {
-  console.log("fetching users");
-  Users
-    .find()
-    .then(users => {
-      console.log(users);
-      res.json({
-        users: users.map(
-          (users) => users.serialize())
-      });
-    })
-    .catch(err => {
-      console.error(err);
-      res.status(500).json({ message: 'Internal server error' });
-    });
-});
-
-app.get('/api/users/:id', (req, res) => {
-  Users
-    .findById(req.params.id)
-    .then(users => res.json(users.serialize()))
-    .catch(err => {
-      console.error(err);
-      res.status(500).json({ message: 'Internal server error' });
-    });
-});
-
-
-app.post('/api/users', (req, res) => {
-
-  const requiredFields = ['email', 'password'];
-  for (let i = 0; i < requiredFields.length; i++) {
-    const field = requiredFields[i];
-    if (!(field in req.body)) {
-      const message = `Missing \`${field}\` in request body`;
-      console.error(message);
-      return res.status(400).send(message);
-    }
+// CORS
+app.use(function (req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', 'Content-Type,Authorization');
+  res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE');
+  if (req.method === 'OPTIONS') {
+    return res.send(204);
   }
-
-  Users
-    .create({
-      email: req.body.email,
-      password: req.body.password
-    })
-    .then(users => res.status(201).json(users.serialize()))
-    .catch(err => {
-      console.error(err);
-      res.status(500).json({ message: 'Internal server error' });
-    });
+  next();
 });
 
+passport.use(localStrategy);
+passport.use(jwtStrategy);
 
-app.put('/api/users/:id', (req, res) => {
-  // ensure that the id in the request path and the one in request body match
-  if (!(req.params.id && req.body.id && req.params.id === req.body.id)) {
-    const message = (
-      `Request path id (${req.params.id}) and request body id ` +
-      `(${req.body.id}) must match`);
-    console.error(message);
-    return res.status(400).json({ message: message });
-  }
+app.use('/api/users/', usersRouter);
+app.use('/api/auth/', authRouter);
 
-  // we only support a subset of fields being updateable.
-  // if the user sent over any of the updatableFields, we udpate those values
-  // in document
-  const toUpdate = {};
-  const updateableFields = ['email', 'password', 'closing'];
+const jwtAuth = passport.authenticate('jwt', { session: false });
 
-  updateableFields.forEach(field => {
-    if (field in req.body) {
-      toUpdate[field] = req.body[field];
-    }
+// A protected endpoint which needs a valid JWT to access it
+app.get('/api/protected', jwtAuth, (req, res) => {
+  return res.json({
+    data: 'rosebud'
   });
-
-  Users
-    // all key/value pairs in toUpdate will be updated -- that's what `$set` does
-    .findByIdAndUpdate(req.params.id, { $set: toUpdate })
-    .then(users => res.status(204).end())
-    .catch(err => res.status(500).json({ message: 'Internal server error' }));
 });
 
-app.delete('/api/users/:id', (req, res) => {
-  Users
-    .findByIdAndRemove(req.params.id)
-    .then(users => res.status(204).end())
-    .catch(err => res.status(500).json({ message: 'Internal server error' }));
-});
+
 
 //RETRIEVE ALL FEEDBACK TEMPLATES
 
