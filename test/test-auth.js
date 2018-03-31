@@ -18,8 +18,8 @@ chai.use(chaiHttp);
 describe('Auth endpoints', function () {
   const username = 'exampleUser';
   const password = 'examplePass';
-  const firstName = 'Example';
-  const lastName = 'User';
+  const email = 'Example';
+  const signature = 'User';
 
   before(function () {
     return runServer(TEST_DATABASE_URL, 1234);
@@ -34,8 +34,8 @@ describe('Auth endpoints', function () {
       User.create({
         username,
         password,
-        firstName,
-        lastName
+        email,
+        signature
       })
     );
   });
@@ -110,8 +110,8 @@ describe('Auth endpoints', function () {
           });
           expect(payload.user).to.deep.equal({
             username,
-            firstName,
-            lastName
+            email,
+            signature
           });
         });
     });
@@ -138,8 +138,8 @@ describe('Auth endpoints', function () {
       const token = jwt.sign(
         {
           username,
-          firstName,
-          lastName
+          email,
+          signature
         },
         'wrongSecret',
         {
@@ -169,8 +169,8 @@ describe('Auth endpoints', function () {
         {
           user: {
             username,
-            firstName,
-            lastName
+            email,
+            signature
           }
         },
         JWT_SECRET,
@@ -196,8 +196,8 @@ describe('Auth endpoints', function () {
           });
           expect(payload.user).to.deep.equal({
             username,
-            firstName,
-            lastName
+            email,
+            signature
           });
           expect(payload.exp).to.be.at.least(decoded.exp);
         });
