@@ -71,7 +71,7 @@
     <div id="register" class="ui middle aligned center aligned grid register">
       <div class="column">
         <h2 class="ui green image header">
-        <img src="https://freeiconshop.com/wp-content/uploads/edd/apple-flat-1.png" class="image">
+        <img src="https://freeiconshop.com/wp-content/uploads/edd/apple-flat-1.png" class="ui small image">
         <div class="content">
         Create an Account
         </div>
@@ -79,17 +79,15 @@
         <form id="registerForm" class="ui large form error">
           <div class="ui stacked segment left aligned">
             <div class="field">
-        
-                <div class="field">
-                  <label>Username</label>
-                  <input id="username" type="text" placeholder="Username" required>
-                </div>
-            
-              <div class="field">
+              <div id="usernameField" class="field">
+                <label>Username</label>
+                <input id="username" type="text" placeholder="Username" required>
+              </div>
+              <div id="emailField" class="field">
                 <label class="left">Email</label>
                 <input id="email" type="email" placeholder="Email Address" required>
               </div>
-              <div class="field">
+              <div id="passwordField" class="field">
                 <label class="left">Password</label>
                 <input id="password" type="password" placeholder="Password" required>
               </div>
@@ -99,6 +97,7 @@
             </button>
           </div>
         </form>
+        <div id="registration-errors"></div>
         <div class="ui column message">
           Already have an account? <a href="/login">Login</a>
         </div>

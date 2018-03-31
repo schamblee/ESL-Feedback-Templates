@@ -15,7 +15,7 @@ const UserSchema = mongoose.Schema({
     required: true
   },
   email: {type: String, default: ''},
-  signature: {type: String, default: 'Thanks for another great lesson!'}
+  signature: {type: String, default: ''}
 });
 
 UserSchema.methods.serialize = function() {

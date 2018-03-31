@@ -31,45 +31,20 @@ function watchCreateAccountSubmit() {
       requestJWT(username, email, password)
       },
       error: function(err) {
-      console.info('There is an error');
-      console.error(err);
-      $('.ui.form')
-        .form({
-          fields: {
-            email: {
-              identifier  : 'email',
-              rules: [
-                {
-                  type   : 'empty',
-                  prompt : 'Please enter your e-mail'
-                },
-                {
-                  type   : 'email',
-                  prompt : 'Please enter a valid e-mail'
-                }
-              ]
-            },
-            password: {
-              identifier  : 'password',
-              rules: [
-                {
-                  type   : 'empty',
-                  prompt : 'Please enter your password'
-                },
-                {
-                  type   : 'length[6]',
-                  prompt : 'Your password must be at least 6 characters'
-                }
-              ]
-            }
-          }
-        })
+        console.info('There is an error');
+        console.error(err);
         if (err.responseJSON.message === 'Username already taken') {
-          console.log("already taken")
+          $('#registration-errors').html(`<div class="ui error message"><ul class="list"><li>The username already exists. Please try a different one.</li></ul>
+          </div>`);
+          $('#usernameField').addClass('error');
         } else if (err.responseJSON.message === 'Must be at least 10 characters long') {
-          console.log("must be 10 characters")
+          $('#registration-errors').html(`<div class="ui error message"><ul class="list"><li>The password must be at least 10 characters long.</li></ul>
+          </div>`);
+          $('#passwordField').addClass('error');
         } else if (err.responseJSON.message === 'Cannot start or end with whitespace') {
-          console.log("cannot start or end with white space")
+          $('#registration-errors').html(`<div class="ui error message"><ul class="list"><li>The password cannot start or end with a space.</li></ul>
+          </div>`);
+          $('#passwordField').addClass('error');
         }
       }
     });
@@ -98,7 +73,7 @@ function requestJWT(username, email, password) {
         headers: {
           'Authorization': "Bearer " + localStorage.getItem('token')
         },
-        success: console.log("JWT successful")
+        success: window.location.href = "/feedback"
       })
     },
     error: function(err) {

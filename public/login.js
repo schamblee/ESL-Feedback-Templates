@@ -32,8 +32,12 @@ function requestJWT(username, password) {
       })
     },
     error: function(err) {
-      console.info('Password is incorrect!');
+      console.info('The login information is incorrect');
       console.error(err);
+      $('#login-errors').html(`<div class="ui error message"><ul class="list"><li>The username and password does not match our records. Please try again or <a href="/#register">create an account</a>.</li></ul>
+          </div>`);
+      $('#usernameField').addClass('error');
+      $('#passwordField').addClass('error');
     } 
   });
 }

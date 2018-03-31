@@ -37,13 +37,13 @@
         </h2>
         <form id="logIn" class="ui large form"> 
           <div class="ui stacked segment">
-            <div class="field">
+            <div id="usernameField" class="field">
               <div class="ui left icon input">
                 <i class="user icon"></i>
                 <input id="username" type="text" name="username" placeholder="Username">
               </div>
             </div>
-            <div class="field">
+            <div id="passwordField" class="field">
               <div class="ui left icon input">
                 <i class="lock icon"></i>
                 <input id="password" type="password" name="password" placeholder="Password">
@@ -51,10 +51,8 @@
             </div>
             <button class="ui fluid large green submit button">Login</button>
           </div>
-
-          <div class="ui error message"><ul class="list"><li>Please enter your e-mail</li><li>Please enter a valid e-mail</li><li>Please enter your password</li><li>Your password must be at least 6 characters</li></ul>
-          </div>
         </form>
+        <div id="login-errors"></div>
         <div class="ui column message">
           New to us? <a href="/#register">Sign Up</a>
         </div>
