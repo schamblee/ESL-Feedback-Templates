@@ -185,5 +185,3 @@ describe('PUT endpoint', function () {
   });
 });
 
-
-
