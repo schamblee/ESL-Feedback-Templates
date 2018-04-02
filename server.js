@@ -6,6 +6,7 @@ const express = require('express');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
 const passport = require('passport');
+require( 'datatables.net-dt' )();
 const { PORT, DATABASE_URL } = require('./config');
 mongoose.Promise = global.Promise;
 

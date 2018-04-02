@@ -19,6 +19,11 @@ h2 {
     background-size: cover;
 }
 
+.modal-action {
+  position: absolute;
+  right: 10px;
+}
+
 .logo {
   width: 40px;
   display: inline-block;
