@@ -4,8 +4,14 @@ const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
 const feedbackTemplatesSchema = mongoose.Schema({
-  lessonId: { type: String, required: true},
-  text: {type: String, required: true}
+  lessonId: { 
+  	type: String, 
+  	required: true
+  },
+  text: {
+  	type: String, 
+  	required: true
+  }
 });
 
 feedbackTemplatesSchema.methods.serialize = function() {

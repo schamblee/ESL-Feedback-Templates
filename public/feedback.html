@@ -51,20 +51,17 @@
         <div class="field">
           <label for="student">Student Name:</label>
           <select id="student">
-            <option>Select a Student</option>
-      	    <option>Annie</option>
-      	    <option>Jerry</option>
-      	    <option>Mary</option>
-      	    <option>Julia</option>
-          </select> 
+            <option selected="selected">Select a Student</option>
+          </select>   
         </div>
-          <input type="radio" name="gender" value="boy" required> Boy
-          <input type="radio" name="gender" value="girl" required> Girl
-          <input type="radio" name="gender" value="girl" required> Child
-          <br>
+        <div class="field">
+          <div id="addNewStudent" class="ui tiny green button">Add New Student</div><br>
+        </div>
           <button class="ui button js-submit addFeedback" type="submit">Add Feedback</button>
     </form>
     <section role="region" class="ui fullscreen modal transition visible js-template-output">
+    </section>
+    <section role="region" class="ui modal transition visible studentForm">
     </section>
     <section role="region" class="js-feedback-output">
       <table id="feedbackTable" class="ui celled table" style="width:100%">
@@ -91,34 +88,25 @@
   </div>
 
   </main>
-  <div class="ui inverted vertical footer segment">
+   <div class="ui inverted vertical footer segment">
     <div class="ui container">
       <div class="ui stackable inverted divided equal height stackable grid">
         <div class="three wide column">
-          <!--
-          <h4 class="ui inverted header">About</h4>
+          <h4 class="ui inverted header">Contact Us</h4>
           <div class="ui inverted link list">
-            <a href="#" class="item">Sitemap</a>
-            <a href="#" class="item">Contact Us</a>
-            <a href="#" class="item">Religious Ceremonies</a>
-            <a href="#" class="item">Gazebo Plans</a>
+            <a href="mailto:5applefeedback@gmail.com?Subject=5%20Apple%20Feedback" target="_top" class="item">Email Us</a>
           </div>
-        -->
         </div>
         <div class="three wide column">
-          <!--
-          <h4 class="ui inverted header">Services</h4>
+          <h4 class="ui inverted header">Follow Us</h4>
           <div class="ui inverted link list">
-            <a href="#" class="item">Banana Pre-Order</a>
-            <a href="#" class="item">DNA FAQ</a>
-            <a href="#" class="item">How To Access</a>
-            <a href="#" class="item">Favorite X-Men</a>
+            <a href="#" class="item"><i class="twitter icon"></i></a>
+            <a href="#" class="item"><i class="facebook icon"></i></a>
           </div>
-        -->
         </div>
         <div class="seven wide column">
           <h4 class="ui inverted header">5 Apple Feedback</h4>
-          <p>5 Apple Feedback is here to help you send helpful, detailed and accurate feedback in seconds.</p>
+          <p>5 Apple Feedback is here to help you send detailed ESL feedback in seconds.</p>
         </div>
       </div>
     </div>

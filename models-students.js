@@ -4,9 +4,30 @@ const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
 const studentsSchema = mongoose.Schema({
-  referenceId: {type: String, required: false},
-  userId: { type: String, required: true},
-  name: {type: String, required: true}
+  referenceId: {
+  	type: String, 
+  	required: false
+  },
+  userId: { 
+  	type: String, 
+  	required: true
+  },
+  name: {
+  	type: String, 
+  	required: true
+  },
+  nickName: {
+  	type: String, 
+  	default: ''
+  },
+  notes: {
+  	type: String, 
+  	default: ''
+  },
+  gender: {
+    type: String, 
+    required: false
+  }
 });
 
 studentsSchema.methods.serialize = function() {
@@ -14,7 +35,9 @@ studentsSchema.methods.serialize = function() {
     id: this._id,
     referenceId: this.referenceId,
     userId: this.userId,
-    name: this.name
+    name: this.name,
+    nickName: this.nickName,
+    notes: this.notes
   };
 };
 

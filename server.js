@@ -1,12 +1,14 @@
 'use strict';
 
 require('dotenv').config();
+//require( 'datatables.net-dt' )();
+
 const bodyParser = require('body-parser');
 const express = require('express');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
 const passport = require('passport');
-require( 'datatables.net-dt' )();
+
 const { PORT, DATABASE_URL } = require('./config');
 mongoose.Promise = global.Promise;
 
@@ -324,7 +326,7 @@ app.put('/api/students/:id', (req, res) => {
   // if the user sent over any of the updatableFields, we udpate those values
   // in document
   const toUpdate = {};
-  const updateableFields = ['name', 'referenceId'];
+  const updateableFields = ['name', 'referenceId', 'notes', 'gender'];
 
   updateableFields.forEach(field => {
     if (field in req.body) {

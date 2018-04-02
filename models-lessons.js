@@ -4,10 +4,22 @@ const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
 const lessonsSchema = mongoose.Schema({
-  referenceId: {type: String, required: true}, //located in the classroom URL on VIPKID
-  code: {type: String, required: true},
-  name: { type: String, required: true},
-  templateId: {type: String, required: true}
+  referenceId: {
+    type: String, 
+    required: true
+  }, 
+  code: {
+    type: String, 
+    required: true
+  },
+  name: { 
+    type: String, 
+    required: true
+  },
+  templateId: {
+    type: String, 
+    required: true
+  }
 });
 
 lessonsSchema.methods.serialize = function() {

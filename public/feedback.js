@@ -1,5 +1,9 @@
 
+const token = sessionStorage.getItem("token");
+const currentUser = sessionStorage.getItem("user");
+
 $(document).ready(function() {
+   console.log(token)
     $('#feedbackTable').DataTable( {
         lengthChange: false,
         ajax: "api/feedback",
@@ -58,15 +62,15 @@ function displayFeedback(data) {
         <h4 class="ui dividing header">${student} ${data.id}</h4>
         <div class="field">
           <label>Feedback Template</label>
-          <textarea class="feedback-input">${feedback.replace(/-name-|-pronoun-|-Pronoun-|-possessive-|-Possessive-/gi, (matched) => { return mapObj[matched]})}
+          <textarea id="feedback-input" class="feedback-input">${feedback.replace(/-name-|-pronoun-|-Pronoun-|-possessive-|-Possessive-/gi, (matched) => { return mapObj[matched]})}
             ${userClosing}</textarea>
         </div>
 
       <div class="actions modal-action">
-        <div class="ui button">Cancel</div>
-          <button class="ui green right labeled icon button copyFeedback" onclick="copyFeedback()">
-          <i class="copy icon"></i>Copy Feedback</button>
-          <button type="submit" class="ui blue button saveFeedback">Save Feedback</button>
+        <div class="ui cancel button">Cancel</div>
+          <div class="ui green right labeled icon button copyFeedback" onclick="copyFeedback()">
+          <i class="copy icon"></i>Copy Feedback</div>
+          <button type="submit" class="ui approve blue button saveFeedback">Save Feedback</button>
       </div>
     </form>
   </div>`);
@@ -94,13 +98,17 @@ function getAndDisplayFeedback() {
     console.log("submitted")
     $('.js-template-output').prop('hidden', false);
 	getFeedback(displayFeedback);
-  $('.ui.modal').modal('show')
+  $('.ui.modal.js-template-output').modal('show');
   });
 }
 
 function watchSaveFeedbackClick() {
   $('.js-template-output').on('submit', '#templateForm', function(event) {
     event.preventDefault();
+    classroomUrl = $('#classroom-url').val();
+    urlRefs = classroomUrl.split('-')
+    lessonId = urlRefs[1]
+    studentId = urlRefs[2]
 
    $.ajax({
       type: 'POST',
@@ -108,13 +116,16 @@ function watchSaveFeedbackClick() {
       contentType: 'application/json',
       dataType: 'json',
       data: JSON.stringify({
-        lessonId: $('#classroom-url').val(),
+        lessonId: `${lessonId}`,
         userId: '123abc',
-        studentId: $('#student').val(),
+        studentId: `${studentId}`,
         text: $('.feedback-input').val()
     }),
     success: function(resultData) {
-      $('.js-feedback-output').append(` 
+      console.log(resultData)
+      $('#classroom-url').val('');
+      $('#student').val('');
+      /*$('.js-feedback-output').append(` 
       <div class="ui accordion">
         <div class="active title">
           <i class="dropdown icon"></i>
@@ -124,23 +135,81 @@ function watchSaveFeedbackClick() {
           <p>A dog is a type of domesticated animal. Known for its loyalty and faithfulness, it can be found as a welcome guest in many households across the world.</p>
         </div>
       </div>`);
-      $('.ui.accordion').accordion();
+      $('.ui.accordion').accordion();*/
   }
 })
 })
 }
 
-function watchDeleteFeedbackClick() {
-  $('.js-output').on('click', '.deleteFeedback', function(event) {
-    $(this).closest('.feedbackTemplate').remove();
+function watchNewStudentClick() {
+  $('#addNewStudent').click((event) => {
+    $('.ui.modal.studentForm').html(`<i class="close icon"></i><div class="header">Student Info</div>
+      <div class="content">
+      <form id="studentForm" class="ui form studentForm">
+        <h4 class="ui dividing header">Save Information About Your Student</h4>
+        <div class="field">
+          <label for="studentName">Name</label>
+          <input id="studentName" class="studentName" required>
+        </div>
+        <div class="field">
+          <label for="studentNickName">Nick Name (for your records)</label>
+          <input id="studentNickName" class="studentNickName">
+        </div>
+        <div class="field">
+          <input type="radio" name="gender" value="boy" required> Boy
+          <input type="radio" name="gender" value="girl" required> Girl
+        </div>
+        <div class="field">
+          <label for="studentNotes">Student Notes (for your records)</label>
+          <textarea id="studentNotes" class="studentNickName"></textarea>
+        </div>
+      <div class="actions">
+        <div class="ui cancel button">Cancel</div>
+          <button type="submit" class="ui approve blue button saveStudent">Save Student</button>
+      </div>
+    </form>
+  </div>`)
+    $('.ui.modal.studentForm').modal('show');
   })
+}
+
+function watchSaveStudent() {
+  $('.studentForm').submit((event) => {
+  event.preventDefault();
+  name = $('#studentName').val();
+  nickName = $('#studentNickName').val();
+  notes = $('#studentNotes').val();
+  classroomUrl = $('#classroom-url').val();
+  urlRefs = classroomUrl.split('-')
+  studentId = urlRefs[2]
+  $.ajax({
+      type: 'POST',
+      url: 'api/students',
+      contentType: 'application/json',
+      dataType: 'json',
+      data: JSON.stringify({
+        referenceId: `${studentId}`,
+        userId: 'abc123',
+        name: `${name}`,
+        nickname: `${nickName}`,
+        notes: `${notes}`
+    }),
+    success: function(resultData) {
+      console.log(resultData)
+      $('#studentName').val('');
+      $('#studentNickName').val('');
+      $('#studentNotes').val('');
+}
+})
+})
 }
 
 
 function handleFeedback() {
   getAndDisplayFeedback();
-  watchDeleteFeedbackClick();
   watchSaveFeedbackClick();
+  watchSaveStudent();
+  watchNewStudentClick();
 }
 
 $(handleFeedback)

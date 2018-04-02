@@ -19,7 +19,7 @@ function requestJWT(username, password) {
     }),
     success: function(resultData) {
       localStorage.setItem('token', resultData.authToken);
-      localStorage.setItem('id', resultData.userID);
+      localStorage.setItem('user', resultData.username);
       $.ajax({
         type: 'GET',
         url: 'api/protected',
