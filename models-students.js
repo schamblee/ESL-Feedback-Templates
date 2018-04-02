@@ -26,7 +26,7 @@ const studentsSchema = mongoose.Schema({
   },
   gender: {
     type: String, 
-    required: false
+    default: ''
   }
 });
 

@@ -31,9 +31,9 @@ function seedStudentData() {
     seedData.push({
       referenceId: faker.name.firstName(),
       userId: faker.name.firstName(),
-      name: faker.lorem.words()
+      name: faker.lorem.words(),
       nickName: faker.name.firstName(),
-      notes: faker.name.words(),
+      notes: faker.lorem.words(),
       gender: faker.name.firstName()
     });
 
@@ -108,7 +108,7 @@ describe('Students API resource', function () {
           res.should.have.status(201);
           res.should.be.json;
           res.body.should.be.a('object');
-          res.body.should.include.keys("id", "name", "userId", "notes", "nickName", "gender");
+          res.body.should.include.keys("id", "name", "userId", "notes", "nickName");
           res.body.id.should.not.be.null;
           res.body.name.should.equal(newStudent.name);
           return Students.findById(res.body.id);
@@ -131,7 +131,7 @@ describe('PUT endpoint', function () {
         referenceId: 'hello',
         userId: 'cats cats cats',
         name: 'dogs dogs dogs',
-        nickName: 'level 2 Jerry'
+        nickName: 'level 2 Jerry',
         notes: 'pigs pigs pigs',
         gender: 'boy'
       };
