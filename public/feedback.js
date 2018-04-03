@@ -2,11 +2,10 @@
 const token = sessionStorage.getItem("token");
 const currentUser = sessionStorage.getItem("user");
 
-$(document).ready(function() {
-   console.log(token)
+/*$(document).ready(function() {
     $('#feedbackTable').DataTable( {
         lengthChange: false,
-        ajax: "api/feedback",
+        ajax: "api/feedback/",
         type: "GET",
         columns: [
             { data: "studentId" },
@@ -16,7 +15,7 @@ $(document).ready(function() {
         ],
         select: true
     } );
-} );
+} );*/
 
 
 // this is mock data, but when we create our API
@@ -117,7 +116,6 @@ function watchSaveFeedbackClick() {
       dataType: 'json',
       data: JSON.stringify({
         lessonId: `${lessonId}`,
-        userId: '123abc',
         studentId: `${studentId}`,
         text: $('.feedback-input').val()
     }),

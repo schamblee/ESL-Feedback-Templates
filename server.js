@@ -19,6 +19,7 @@ const { Feedback } = require('./models-feedback');
 
 const { router: usersRouter } = require('./users');
 const { router: authRouter, localStrategy, jwtStrategy } = require('./auth');
+const { localAuth } = require('./authConfig')
 
 const app = express();
 
@@ -353,7 +354,9 @@ app.delete('/api/students/:id', (req, res) => {
 app.get('/api/feedback', (req, res) => {
   console.log("fetching feedback");
   Feedback
-    .find()
+    .find({
+      userId: req.user._id
+    })
     .then(feedback => {
       console.log(feedback);
       res.json({
@@ -379,10 +382,13 @@ app.get('/api/feedback/:id', (req, res) => {
 });
 
 
-app.post('/api/feedback', (req, res) => {
+app.post('/api/feedback',  (req, res) => {
+console.log('anything making it here?')
+console.log(`the user id is ${localAuth()}`);
 
-  const requiredFields = ['lessonId', 'userId', 'studentId', 'text'];
+  const requiredFields = ['lessonId', 'studentId', 'text'];
   for (let i = 0; i < requiredFields.length; i++) {
+
     const field = requiredFields[i];
     if (!(field in req.body)) {
       const message = `Missing \`${field}\` in request body`;
@@ -390,11 +396,10 @@ app.post('/api/feedback', (req, res) => {
       return res.status(400).send(message);
     }
   }
-
-  Feedback
+    Feedback
     .create({
       lessonId: req.body.lessonId,
-      userId: req.body.userId,
+      userId: 'abc123',
       studentId: req.body.studentId,
       text: req.body.text
     })
