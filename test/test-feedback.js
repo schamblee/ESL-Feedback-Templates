@@ -8,11 +8,13 @@ mongoose.Promise = global.Promise;
 const should = chai.should();
 const expect = chai.expect
 
-const { Feedback } = require('../models-feedback');
+const { Feedback } = require('../feedback');
 const { closeServer, runServer, app } = require('../server');
 const { TEST_DATABASE_URL } = require('../config');
 
 chai.use(chaiHttp);
+
+
 
 // Deletes the entire database.
 function tearDownDb() {

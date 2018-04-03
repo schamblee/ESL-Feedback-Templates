@@ -15,7 +15,8 @@ mongoose.Promise = global.Promise;
 const { Lessons } = require('./models-lessons');
 const { Students } = require('./models-students');
 const { FeedbackTemplates } = require('./models-feedbackTemplates');
-const { Feedback } = require('./models-feedback');
+
+const { router: feedbackRouter } = require('./feedback');
 
 const { router: usersRouter } = require('./users');
 const { router: authRouter, localStrategy, jwtStrategy } = require('./auth');
@@ -56,6 +57,7 @@ app.use(function (req, res, next) {
 passport.use(localStrategy);
 passport.use(jwtStrategy);
 
+app.use('/api/feedback/', feedbackRouter);
 app.use('/api/users/', usersRouter);
 app.use('/api/auth/', authRouter);
 
@@ -349,7 +351,7 @@ app.delete('/api/students/:id', (req, res) => {
     .catch(err => res.status(500).json({ message: 'Internal server error' }));
 });
 
-//Feedback
+/*//Feedback
 
 app.get('/api/feedback', (req, res) => {
   console.log("fetching feedback");
@@ -382,9 +384,9 @@ app.get('/api/feedback/:id', (req, res) => {
 });
 
 
-app.post('/api/feedback',  (req, res) => {
+app.post('/api/feedback', (req, res) => {
 console.log('anything making it here?')
-console.log(`the user id is ${localAuth()}`);
+console.log(`the user id is`);
 
   const requiredFields = ['lessonId', 'studentId', 'text'];
   for (let i = 0; i < requiredFields.length; i++) {
@@ -446,7 +448,7 @@ app.delete('/api/feedback/:id', (req, res) => {
     .then(students => res.status(204).end())
     .catch(err => res.status(500).json({ message: 'Internal server error' }));
 });
-
+*/
 
 // catch-all endpoint if client makes request to non-existent endpoint
 app.use('*', function (req, res) {

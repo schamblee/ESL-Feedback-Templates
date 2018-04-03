@@ -1,6 +1,6 @@
 
-const token = sessionStorage.getItem("token");
-const currentUser = sessionStorage.getItem("user");
+const token = localStorage.getItem("authToken");
+const currentUser = localStorage.getItem("user");
 
 /*$(document).ready(function() {
     $('#feedbackTable').DataTable( {
@@ -49,9 +49,9 @@ let possessive = 'him'
 let Possessive = 'Him'
 
 mapObj = {
-  "-Pronoun-": `${Pronoun}`,
-  "-pronoun-": `${pronoun}`,
-  "-name-": `${student}`
+  "-Pronoun-": Pronoun,
+  "-pronoun-": pronoun,
+  "-name-": student
 }
 
 function displayFeedback(data) {
@@ -94,6 +94,8 @@ function copyFeedback() {
 function getAndDisplayFeedback() {
   $('#templateForm').submit(event => {
     event.preventDefault();
+    console.log(currentUser)
+
     console.log("submitted")
     $('.js-template-output').prop('hidden', false);
 	getFeedback(displayFeedback);
@@ -115,12 +117,14 @@ function watchSaveFeedbackClick() {
       contentType: 'application/json',
       dataType: 'json',
       data: JSON.stringify({
-        lessonId: `${lessonId}`,
-        studentId: `${studentId}`,
+        lessonId,
+        userId: currentUser,
+        studentId,
         text: $('.feedback-input').val()
     }),
     success: function(resultData) {
       console.log(resultData)
+      console.log(`The currentUser variable is ${currentUser}`)
       $('#classroom-url').val('');
       $('#student').val('');
       /*$('.js-feedback-output').append(` 
@@ -134,10 +138,24 @@ function watchSaveFeedbackClick() {
         </div>
       </div>`);
       $('.ui.accordion').accordion();*/
-  }
+    },
+    error: handleError,
+    beforeSend: function(xhr) { 
+      xhr.setRequestHeader('Authorization','Bearer ' + token) 
+    }
 })
 })
 }
+
+function handleError(err){
+    if (err.status === 401){
+        console.log("There was an error")
+        return;
+    }
+    $('#feedback').append(
+      `<p>Error: Server returned ${err.status}. ${err.responseText} </p>`
+    );
+  }
 
 function watchNewStudentClick() {
   $('#addNewStudent').click((event) => {
@@ -187,10 +205,10 @@ function watchSaveStudent() {
       dataType: 'json',
       data: JSON.stringify({
         referenceId: `${studentId}`,
-        userId: 'abc123',
-        name: `${name}`,
-        nickname: `${nickName}`,
-        notes: `${notes}`
+        userId: currentUser,
+        name,
+        nickname: nickName,
+        notes
     }),
     success: function(resultData) {
       console.log(resultData)
@@ -201,6 +219,8 @@ function watchSaveStudent() {
 })
 })
 }
+
+
 
 
 function handleFeedback() {

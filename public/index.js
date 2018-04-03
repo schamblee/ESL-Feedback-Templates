@@ -45,6 +45,10 @@ function watchCreateAccountSubmit() {
           $('#registration-errors').html(`<div class="ui error message"><ul class="list"><li>The password cannot start or end with a space.</li></ul>
           </div>`);
           $('#passwordField').addClass('error');
+        } else if (err.responseJSON.message === 'Email Address already taken') {
+          $('#registration-errors').html(`<div class="ui error message"><ul class="list"><li>The email already exists. Please try a different one or <a href="/login">log in</a>.</li></ul>
+          </div>`);
+          $('#emailField').addClass('error');
         }
       }
     });
