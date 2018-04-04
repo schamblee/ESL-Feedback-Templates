@@ -2,20 +2,44 @@
 const token = localStorage.getItem("authToken");
 const currentUser = localStorage.getItem("user");
 
-/*$(document).ready(function() {
-    $('#feedbackTable').DataTable( {
-        lengthChange: false,
-        ajax: "api/feedback/",
-        type: "GET",
-        columns: [
-            { data: "studentId" },
-            { data: "lessonId" },
-            { data: "text" },
-            { data: "created" }
-        ],
-        select: true
-    } );
-} );*/
+$(document).ready(function() {
+   $.ajax({
+      type: 'GET',
+      url: `api/feedback/${currentUser}`,
+      contentType: 'application/json',
+      dataType: 'json',
+    success: function(resultData) {
+      console.log(resultData)
+      displayFeedbackTableData(resultData)
+      $('.ui.accordion').accordion()
+      $('.ui.dropdown').dropdown()
+    }
+  });
+ });
+
+function renderResult(result) {
+  return `
+
+  <div class="ui accordion">
+    <tr>
+    <div class="title">
+      <i class="dropdown icon"></i> 
+      ${result.studentId}
+      ${result.lessonId}
+      ${result.created}
+    </div>
+      <div class="content">
+        <p class="savedFeedback">${result.text}</p>
+      </div>
+    </tr>
+  </div>`;
+};
+
+function displayFeedbackTableData(data) {
+  const results = data.feedback.map((item, index) => renderResult(item));
+  $('#feedbackTableData').html(results);
+}
+
 
 
 // this is mock data, but when we create our API
@@ -42,7 +66,7 @@ let feedback = `-name- did a great job today learning the new words 'mom' and 'd
 
 // this function stays the same when we connect
 // to real API later
-let student = 'Jerry'
+let student = $('input[name="student"]').val();
 let pronoun = 'he'
 let Pronoun = 'He'
 let possessive = 'him'
@@ -207,14 +231,12 @@ function watchSaveStudent() {
         referenceId: `${studentId}`,
         userId: currentUser,
         name,
-        nickname: nickName,
+        nickName,
         notes
     }),
     success: function(resultData) {
       console.log(resultData)
-      $('#studentName').val('');
-      $('#studentNickName').val('');
-      $('#studentNotes').val('');
+
 }
 })
 })

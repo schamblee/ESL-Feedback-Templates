@@ -10,6 +10,7 @@
   <title>Five-Apple Feedback</title>
   <link rel="stylesheet" type="text/css" href="index.css">
   <link rel="stylesheet" type="text/css" href="dist/semantic.min.css">
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.16/datatables.min.css"/>
 </head>
 
 <body class="pushable">
@@ -43,16 +44,17 @@
           </div>
         </div>
         </div>
-        <!--Or Enter the Lesson Code Manually<br>
-        <div class="field">
-          <label for="code">Lesson Code:</label>
-          <input type="text" name="code" placeholder="example: MC-L2-U12-LC1-3"><br>
-        </div>-->
         <div class="field">
           <label for="student">Student Name:</label>
-          <select id="student">
-            <option selected="selected">Select a Student</option>
-          </select>   
+          <div id="student" class="ui fluid search selection dropdown">
+            <input type="hidden" name="student">
+            <i class="dropdown icon"></i>
+            <div class="default text">Select Student</div>
+            <div class="menu">
+              <div class="item">jerry</div>
+              <div class="item">Sarah</div>
+            </div>
+          </div>   
         </div>
         <div class="field">
           <div id="addNewStudent" class="ui tiny green button">Add New Student</div><br>
@@ -65,23 +67,25 @@
     </section>
     <section role="region" class="js-feedback-output">
       <table id="feedbackTable" class="ui celled table" style="width:100%">
-        <thead>
+        <thead class="title">
             <tr>
-                <th>Student</th>
-                <th>Lesson</th>
-                <th>Feedback</th>
-                <th>Date</th>
+                <th>Saved Feedback
             </tr>
         </thead>
+        <tbody id="feedbackTableData">
+        </tbody>
         <tfoot>
-            <tr>
-                <th>Student</th>
-                <th>Lesson</th>
-                <th>Feedback</th>
-                <th>Date</th>
-            </tr>
+          <tr><th colspan="3">
+            <div class="ui right floated pagination menu">
+              <button class="icon item">
+                <i class="right chevron icon"></i>
+              </button>
+            </div>
+          </th>
+          </tr>
         </tfoot>
       </table>
+    </div>
     </section>
   </div>
   </div>
@@ -112,8 +116,6 @@
     </div>
   </div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.16/datatables.min.css"/>
-  <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.16/datatables.min.js"></script>
   <script type="text/javascript" src="dist/semantic.min.js"></script>
   <script type="text/javascript" src="feedback.js"></script>
 </body>
