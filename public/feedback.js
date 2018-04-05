@@ -2,6 +2,7 @@
 const token = localStorage.getItem("authToken");
 const currentUser = localStorage.getItem("user");
 
+
 $(document).ready(function() {
    $.ajax({
       type: 'GET',
@@ -77,28 +78,6 @@ mapObj = {
   "-name-": student
 }
 
-function displayFeedback(data) {
-	   $('.js-template-output').html(`<i class="close icon"></i><div class="header">Feeback</div>
-    <div class="content">
-      <form id="templateForm" class="ui form feedbackTemplate">
-        <h4 class="ui dividing header">${student} ${data.id}</h4>
-        <div class="field">
-          <label>Feedback Template</label>
-          <textarea id="feedback-input" class="feedback-input">${feedback.replace(/-name-|-pronoun-|-Pronoun-|-possessive-|-Possessive-/gi, (matched) => { return mapObj[matched]})}
-            ${userClosing}</textarea>
-        </div>
-
-      <div class="actions modal-action">
-        <div class="ui cancel button">Cancel</div>
-          <div class="ui green right labeled icon button copyFeedback" onclick="copyFeedback()">
-          <i class="copy icon"></i>Copy Feedback</div>
-          <button type="submit" class="ui approve blue button saveFeedback">Save Feedback</button>
-      </div>
-    </form>
-  </div>`);
-  }
-
-
 
 function copyFeedback() {
   /* Get the text field */
@@ -110,8 +89,7 @@ function copyFeedback() {
   /* Copy the text inside the text field */
   document.execCommand("Copy");
 
-  /* Alert the copied text */
-  alert("Copied the text: " + copyText.value);
+  $('#copied-message').html(displayCopiedFeedbackMessage())
 }
 
 function getAndDisplayFeedback() {
@@ -155,8 +133,8 @@ function watchSaveFeedbackClick() {
     beforeSend: function(xhr) { 
       xhr.setRequestHeader('Authorization','Bearer ' + token) 
     }
-})
-})
+  })
+  })
 }
 
 function handleError(err){
@@ -218,6 +196,37 @@ function watchNewStudentClick() {
   })
 }
 
+function displayFeedback(data) {
+     $('.js-template-output').html(`<i class="close icon"></i><div class="header">Feeback</div>
+    <div class="content">
+      <form id="templateForm" class="ui form feedbackTemplate">
+        <h4 class="ui dividing header">${student} ${data.id}</h4>
+        <div class="field">
+          <label>Feedback Template</label>
+          <textarea id="feedback-input" class="feedback-input">${feedback.replace(/-name-|-pronoun-|-Pronoun-|-possessive-|-Possessive-/gi, (matched) => { return mapObj[matched]})}
+            ${userClosing}</textarea>
+        </div>
+
+      <div class="actions modal-action">
+        <div class="ui cancel button">Cancel</div>
+          <div class="ui green right labeled icon button copyFeedback" onclick="copyFeedback()">
+          <i class="copy icon"></i>Copy Feedback</div>
+          <button type="submit" class="ui approve blue button saveFeedback">Save Feedback</button>
+      </div>
+    </form>
+    <div id="copied-message"></div>
+  </div>`);
+}
+
+function displayCopiedFeedbackMessage() {
+  return `<div class="ui success message">
+  <div class="header">
+    Your feedback has been copied!
+  </div>
+  <p>You may now paste your feedback in your classroom.</p>
+  </div>`
+}
+
 function watchSaveStudent() {
   $('.studentForm').submit((event) => {
   event.preventDefault();
@@ -268,6 +277,15 @@ function watchStudentDropDownClick() {
   })
 }
 
+function watchSignOut(){
+    $('#sign-out').click((event) => {
+        event.preventDefault();
+        localStorage.removeItem("home");
+        sessionStorage.removeItem("authToken");
+        window.location.href = "/"
+    })
+}
+
 function handleFeedback() {
   getAndDisplayFeedback();
   watchSaveFeedbackClick();
@@ -276,6 +294,7 @@ function handleFeedback() {
   watchWelcomeMessageCLose();
   watchInfoClick();
   watchStudentDropDownClick();
+  watchSignOut();
 }
 
 $(handleFeedback)
