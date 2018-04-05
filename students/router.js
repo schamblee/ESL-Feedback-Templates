@@ -61,7 +61,11 @@ router.post('/', (req, res) => {
   Students
     .create({
       userId: req.body.userId,
-      name: req.body.name
+      referenceId: req.body.referenceId,
+      name: req.body.name,
+      nickName: req.body.nickName,
+      notes: req.body.notes,
+      pronoun: req.body.pronoun
     })
     .then(students => res.status(201).json(students.serialize()))
     .catch(err => {

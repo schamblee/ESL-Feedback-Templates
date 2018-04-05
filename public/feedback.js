@@ -196,8 +196,8 @@ function watchNewStudentClick() {
           <input id="studentNickName" class="studentNickName">
         </div>
         <div class="field">
-          <input type="radio" name="gender" value="boy" required> Boy
-          <input type="radio" name="gender" value="girl" required> Girl
+          <input type="radio" name="pronoun" value="boy" required> Boy
+          <input type="radio" name="pronoun" value="girl" required> Girl
         </div>
         <div class="field">
           <label for="studentNotes">Student Notes (for your records)</label>
@@ -217,6 +217,7 @@ function watchSaveStudent() {
   $('.studentForm').submit((event) => {
   event.preventDefault();
   name = $('#studentName').val();
+  pronoun = $('input[name="pronoun"]')
   nickName = $('#studentNickName').val();
   notes = $('#studentNotes').val();
   classroomUrl = $('#classroom-url').val();
@@ -228,17 +229,20 @@ function watchSaveStudent() {
       contentType: 'application/json',
       dataType: 'json',
       data: JSON.stringify({
-        referenceId: `${studentId}`,
+        referenceId: studentId,
+        pronoun: pronoun,
         userId: currentUser,
-        name,
+        name: name,
         nickName,
         notes
     }),
     success: function(resultData) {
       console.log(resultData)
 
-}
+  }
 })
+  $('#studentNameInput').text(name)
+  $('#studentNameInput').removeClass('default')
 })
 }
 

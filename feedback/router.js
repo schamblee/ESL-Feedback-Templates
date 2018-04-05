@@ -31,17 +31,6 @@ router.get('/:userId', (req, res) => {
     });
 });
 
-/*
-router.get('/:id', (req, res) => {
-  Feedback
-    .findById(req.params.id)
-    .then(feedback => res.json(feedback.serialize()))
-    .catch(err => {
-      console.error(err);
-      res.status(500).json({ message: 'Internal server error' });
-    });
-}); */
-
 
 router.post('/', (req, res) => {
 

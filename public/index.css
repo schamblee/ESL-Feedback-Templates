@@ -126,9 +126,14 @@ h2 {
   width: 300px;
 }
 
-.savedFeedback {
-  padding: 5px;
-  font-size: 5px;
+.ui.vertical.stripe p {
+  font-size: 1.0em;
+  padding-left: 1em;
+}
+
+
+#templateForm {
+  margin-bottom: 20px;
 }
 
 @media only screen and (max-width: 700px) {

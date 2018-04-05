@@ -24,7 +24,7 @@ const studentsSchema = mongoose.Schema({
     type: String,
     required: false
   },
-  gender: {
+  pronoun: {
     type: String,
     required: false
   }
@@ -37,7 +37,8 @@ studentsSchema.methods.serialize = function() {
     userId: this.userId,
     name: this.name,
     nickName: this.nickName,
-    notes: this.notes
+    notes: this.notes,
+    pronoun: this.pronoun
   };
 };
 
