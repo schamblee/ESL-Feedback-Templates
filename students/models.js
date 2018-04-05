@@ -32,15 +32,12 @@ const studentsSchema = mongoose.Schema({
 
 studentsSchema.methods.serialize = function() {
   return {
-    id: this._id,
-    referenceId: this.referenceId,
-    userId: this.userId,
-    name: this.name,
-    nickName: this.nickName,
-    notes: this.notes,
-    pronoun: this.pronoun
+    value: this._id,
+    name: this.name
   };
 };
 
+
 const Students = mongoose.model('Students', studentsSchema);
+
 module.exports = {Students};

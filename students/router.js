@@ -18,9 +18,9 @@ router.use(bodyParser.json());
 
 
 
-router.get('/:name', (req, res) => {
+router.get('/:userId', (req, res) => {
   Students
-    .find({name: req.params.name})
+    .find({userId: req.params.userId})
     .then(students => {
       console.log(students);
       res.json({

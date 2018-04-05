@@ -12,7 +12,6 @@ $(document).ready(function() {
       console.log(resultData)
       displayFeedbackTableData(resultData)
       $('.ui.accordion').accordion()
-      $('.ui.dropdown').dropdown()
     }
   });
  });
@@ -151,17 +150,6 @@ function watchSaveFeedbackClick() {
       console.log(`The currentUser variable is ${currentUser}`)
       $('#classroom-url').val('');
       $('#student').val('');
-      /*$('.js-feedback-output').append(` 
-      <div class="ui accordion">
-        <div class="active title">
-          <i class="dropdown icon"></i>
-            What is a dog?
-        </div>
-        <div class="active content">
-          <p>A dog is a type of domesticated animal. Known for its loyalty and faithfulness, it can be found as a welcome guest in many households across the world.</p>
-        </div>
-      </div>`);
-      $('.ui.accordion').accordion();*/
     },
     error: handleError,
     beforeSend: function(xhr) { 
@@ -256,8 +244,8 @@ function watchSaveStudent() {
     success: function(resultData) {
       console.log(resultData)
 
-  }
-})
+    }
+  });
   $('#studentNameInput').text(name)
   $('#studentNameInput').removeClass('default')
 })
@@ -270,6 +258,16 @@ function watchWelcomeMessageCLose() {
   });
 }
 
+function watchStudentDropDownClick() {
+  $('#student').click( (event) => {
+  $('.ui.dropdown').dropdown({
+        apiSettings: {
+        url: `/api/students/${currentUser}`
+      }
+  })
+  })
+}
+
 function handleFeedback() {
   getAndDisplayFeedback();
   watchSaveFeedbackClick();
@@ -277,6 +275,7 @@ function handleFeedback() {
   watchNewStudentClick();
   watchWelcomeMessageCLose();
   watchInfoClick();
+  watchStudentDropDownClick();
 }
 
 $(handleFeedback)
