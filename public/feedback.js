@@ -181,6 +181,23 @@ function handleError(err){
     );
   }
 
+function watchInfoClick() {
+  $('#instructions').click((event) => { 
+    $('.ui.modal.classroomLinkInstructions').html(`<i class="close icon"></i><div class="header">How to Copy Classroom Link</div>
+      <div id="info-content" class="content">
+        <img id="instructionalGif" src="https://media.giphy.com/media/csN3ARPWeFwACe77fc/giphy.gif" alt="How to copy and paste the classroom link">
+        <ol>
+          <li>Enter your <a href="https://t.vipkid.com.cn/classrooms">VIPKID classroom</a> 
+          <li>Highlight and right-click the link to copy the classroom link</li> 
+          <li>Right-click and paste the classroom link below</li> 
+          <li>Save student information</li>
+          <li>Click "Add Feedback" to copy and save your feedback for your class.</li>
+        </ol>
+      </div>`)
+    $('.ui.modal.classroomLinkInstructions').modal('show');
+  })
+}
+
 function watchNewStudentClick() {
   $('#addNewStudent').click((event) => {
     $('.ui.modal.studentForm').html(`<i class="close icon"></i><div class="header">Student Info</div>
@@ -217,7 +234,7 @@ function watchSaveStudent() {
   $('.studentForm').submit((event) => {
   event.preventDefault();
   name = $('#studentName').val();
-  pronoun = $('input[name="pronoun"]')
+  pronoun = $('input[name="pronoun"]').val()
   nickName = $('#studentNickName').val();
   notes = $('#studentNotes').val();
   classroomUrl = $('#classroom-url').val();
@@ -247,13 +264,19 @@ function watchSaveStudent() {
 }
 
 
-
+function watchWelcomeMessageCLose() {
+  $('.message .close').on('click', function() {
+    $(this).closest('.message').transition('fade')
+  });
+}
 
 function handleFeedback() {
   getAndDisplayFeedback();
   watchSaveFeedbackClick();
   watchSaveStudent();
   watchNewStudentClick();
+  watchWelcomeMessageCLose();
+  watchInfoClick();
 }
 
 $(handleFeedback)

@@ -16,7 +16,6 @@
 <body class="pushable">
 <!-- Page Contents -->
 <div class="pusher">
-
   <div class="ui fixed inverted menu">
     <div class="ui container">
       <a href="/" class="header item">
@@ -28,21 +27,32 @@
       </div>
     </div>
   </div>
-
-    <div class="ui vertical masthead left aligned segment">
+  <div class="ui vertical masthead left aligned segment">
     <div class="ui vertical stripe segment">
-    <div class="ui text container">
-    <form id="templateForm" class="ui form">
-      <div class="fields">
-        <div class="field">
-          <label for="classroom-url">Paste the Classroom Link <a id="instructions" href="#"><i class="question circle outline icon"></i></a>:</label>
-          <div class="ui labeled input">
-            <div class="ui label">
-             http://
+      <div class="ui text container">
+      <div id="welcome-message" class="ui info green message transition">
+        <i class="close icon"></i>
+        <div class="header">Welcome to 5 Apple Feedback</div>
+        <ul class="list">
+          <li>Enter your <a href="https://t.vipkid.com.cn/classrooms">VIPKID classroom</a> 
+          <li>Copy and paste the classroom link below</li> 
+          <li>Save student information</li>
+          <li>Click "Add Feedback" to copy and save your feedback for your class.</li>
+        </ul>
+      </div>
+      </div>
+      <div class="ui text container">
+        <form id="templateForm" class="ui form">
+          <div class="fields">
+            <div class="field">
+              <label for="classroom-url">Paste the Classroom Link <a id="instructions" href="#"><i class="question circle outline icon"></i></a>:</label>
+              <div class="ui labeled input">
+              <div class="ui label">
+               http://
+              </div>
+              <input id="classroom-url" name="classroom" type="text" placeholder="t.vipkid.com.cn/classrooms/" required>
             </div>
-            <input id="classroom-url" name="classroom" type="text" placeholder="t.vipkid.com.cn/classrooms/" required>
           </div>
-        </div>
         </div>
         <div class="field">
           <label for="student">Student Name:</label>
@@ -65,6 +75,7 @@
     </section>
     <section role="region" class="ui modal transition visible studentForm">
     </section>
+    <section role="region" class="ui modal transition visible classroomLinkInstructions"></section>
     <section role="region" class="js-feedback-output">
       <table id="feedbackTable" class="ui celled table" style="width:100%">
         <thead class="title">
