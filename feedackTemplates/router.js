@@ -2,7 +2,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 
-const { Students } = require('./models');
+const { FeedbackTemplates } = require('./models');
 
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
@@ -11,16 +11,19 @@ const config = require('../config');
 const router = express.Router();
 const { localAuth, createAuthToken } = require('../authConfig')
 
+
 router.use(bodyParser.json());
 
-router.get('/:userId', (req, res) => {
-  Students
-    .find({userId: req.params.userId})
-    .then(students => {
-      console.log(students);
+
+router.get('/api/feedbackTemplates', (req, res) => {
+  console.log("fetching feedback templates");
+  FeedbackTemplates
+    .find()
+    .then(feedbackTemplates => {
+      console.log(feedbackTemplates);
       res.json({
-        students: students.map(
-          (students) => students.serialize())
+        feedbackTemplates: feedbackTemplates.map(
+          (feedbackTemplates) => feedbackTemplates.serialize())
       });
     })
     .catch(err => {
@@ -29,11 +32,10 @@ router.get('/:userId', (req, res) => {
     });
 });
 
-
-router.get('/api/students/:id', (req, res) => {
-  Students
+router.get('/api/feedbackTemplates/:id', (req, res) => {
+  FeedbackTemplates
     .findById(req.params.id)
-    .then(students => res.json(students.serialize()))
+    .then(feedbackTemplates => res.json(feedbackTemplates.serialize()))
     .catch(err => {
       console.error(err);
       res.status(500).json({ message: 'Internal server error' });
@@ -41,9 +43,9 @@ router.get('/api/students/:id', (req, res) => {
 });
 
 
-router.post('/', (req, res) => {
+router.post('/api/feedbackTemplates', (req, res) => {
 
-  const requiredFields = ['userId', 'name'];
+  const requiredFields = ['text'];
   for (let i = 0; i < requiredFields.length; i++) {
     const field = requiredFields[i];
     if (!(field in req.body)) {
@@ -53,16 +55,12 @@ router.post('/', (req, res) => {
     }
   }
 
-  Students
+  FeedbackTemplates
     .create({
-      userId: req.body.userId,
-      referenceId: req.body.referenceId,
-      name: req.body.name,
-      nickName: req.body.nickName,
-      notes: req.body.notes,
-      pronoun: req.body.pronoun
+      lessonId: req.body.lessonId,
+      text: req.body.text
     })
-    .then(students => res.status(201).json(students.serialize()))
+    .then(feedbackTemplates => res.status(201).json(feedbackTemplates.serialize()))
     .catch(err => {
       console.error(err);
       res.status(500).json({ message: 'Internal server error' });
@@ -70,7 +68,7 @@ router.post('/', (req, res) => {
 });
 
 
-router.put('/:id', (req, res) => {
+router.put('/api/feedbackTemplates/:id', (req, res) => {
   // ensure that the id in the request path and the one in request body match
   if (!(req.params.id && req.body.id && req.params.id === req.body.id)) {
     const message = (
@@ -84,7 +82,7 @@ router.put('/:id', (req, res) => {
   // if the user sent over any of the updatableFields, we udpate those values
   // in document
   const toUpdate = {};
-  const updateableFields = ['name', 'referenceId', 'notes', 'gender'];
+  const updateableFields = ['text'];
 
   updateableFields.forEach(field => {
     if (field in req.body) {
@@ -92,18 +90,18 @@ router.put('/:id', (req, res) => {
     }
   });
 
-  Students
+  FeedbackTemplates
     // all key/value pairs in toUpdate will be updated -- that's what `$set` does
     .findByIdAndUpdate(req.params.id, { $set: toUpdate })
-    .then(students => res.status(204).end())
+    .then(feedbackTemplates => res.status(204).end())
     .catch(err => res.status(500).json({ message: 'Internal server error' }));
 });
 
-router.delete('/:id', (req, res) => {
-  Students
+router.delete('/api/feedbackTemplates/:id', (req, res) => {
+  FeedbackTemplates
     .findByIdAndRemove(req.params.id)
-    .then(students => res.status(204).end())
+    .then(feedbackTemplates => res.status(204).end())
     .catch(err => res.status(500).json({ message: 'Internal server error' }));
 });
 
-module.exports = {router};
+module.exports = { router };

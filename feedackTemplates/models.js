@@ -5,12 +5,12 @@ mongoose.Promise = global.Promise;
 
 const feedbackTemplatesSchema = mongoose.Schema({
   lessonId: { 
-  	type: String, 
-  	required: true
+    type: String, 
+    required: true
   },
   text: {
-  	type: String, 
-  	required: true
+    type: String, 
+    required: true
   }
 });
 
@@ -23,16 +23,4 @@ feedbackTemplatesSchema.methods.serialize = function() {
 };
 
 const FeedbackTemplates = mongoose.model('FeedbackTemplates', feedbackTemplatesSchema);
-module.exports = {FeedbackTemplates};
-
-
-
-
-
-
-
-
-
-
-
-
+module.exports = { FeedbackTemplates };

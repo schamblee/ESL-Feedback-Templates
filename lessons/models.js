@@ -33,4 +33,4 @@ lessonsSchema.methods.serialize = function() {
 };
 
 const Lessons = mongoose.model('Lessons', lessonsSchema);
-module.exports = {Lessons};
+module.exports = { Lessons };

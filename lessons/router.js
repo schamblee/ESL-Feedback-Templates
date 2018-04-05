@@ -2,7 +2,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 
-const { Students } = require('./models');
+const { Lessons } = require('./models');
 
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
@@ -11,16 +11,19 @@ const config = require('../config');
 const router = express.Router();
 const { localAuth, createAuthToken } = require('../authConfig')
 
+
 router.use(bodyParser.json());
 
-router.get('/:userId', (req, res) => {
-  Students
-    .find({userId: req.params.userId})
-    .then(students => {
-      console.log(students);
+
+router.get('/api/lessons', (req, res) => {
+  console.log("fetching lessons");
+  Lessons
+    .find()
+    .then(lessons => {
+      console.log(lessons);
       res.json({
-        students: students.map(
-          (students) => students.serialize())
+        lessons: lessons.map(
+          (lessons) => lessons.serialize())
       });
     })
     .catch(err => {
@@ -30,10 +33,10 @@ router.get('/:userId', (req, res) => {
 });
 
 
-router.get('/api/students/:id', (req, res) => {
-  Students
+router.get('/api/lessons/:id', (req, res) => {
+  Lessons
     .findById(req.params.id)
-    .then(students => res.json(students.serialize()))
+    .then(lessons => res.json(lessons.serialize()))
     .catch(err => {
       console.error(err);
       res.status(500).json({ message: 'Internal server error' });
@@ -41,9 +44,9 @@ router.get('/api/students/:id', (req, res) => {
 });
 
 
-router.post('/', (req, res) => {
+router.post('/api/lessons', (req, res) => {
 
-  const requiredFields = ['userId', 'name'];
+  const requiredFields = ['referenceId', 'code', 'name', 'templateId'];
   for (let i = 0; i < requiredFields.length; i++) {
     const field = requiredFields[i];
     if (!(field in req.body)) {
@@ -53,16 +56,14 @@ router.post('/', (req, res) => {
     }
   }
 
-  Students
+  Lessons
     .create({
-      userId: req.body.userId,
       referenceId: req.body.referenceId,
+      code: req.body.code,
       name: req.body.name,
-      nickName: req.body.nickName,
-      notes: req.body.notes,
-      pronoun: req.body.pronoun
+      templateId: req.body.templateId
     })
-    .then(students => res.status(201).json(students.serialize()))
+    .then(lessons => res.status(201).json(lessons.serialize()))
     .catch(err => {
       console.error(err);
       res.status(500).json({ message: 'Internal server error' });
@@ -70,7 +71,7 @@ router.post('/', (req, res) => {
 });
 
 
-router.put('/:id', (req, res) => {
+router.put('/api/lessons/:id', (req, res) => {
   // ensure that the id in the request path and the one in request body match
   if (!(req.params.id && req.body.id && req.params.id === req.body.id)) {
     const message = (
@@ -84,7 +85,7 @@ router.put('/:id', (req, res) => {
   // if the user sent over any of the updatableFields, we udpate those values
   // in document
   const toUpdate = {};
-  const updateableFields = ['name', 'referenceId', 'notes', 'gender'];
+  const updateableFields = ['code', 'name', 'referenceId', 'templateId'];
 
   updateableFields.forEach(field => {
     if (field in req.body) {
@@ -92,18 +93,18 @@ router.put('/:id', (req, res) => {
     }
   });
 
-  Students
+  Lessons
     // all key/value pairs in toUpdate will be updated -- that's what `$set` does
     .findByIdAndUpdate(req.params.id, { $set: toUpdate })
-    .then(students => res.status(204).end())
+    .then(lessons => res.status(204).end())
     .catch(err => res.status(500).json({ message: 'Internal server error' }));
 });
 
-router.delete('/:id', (req, res) => {
-  Students
+router.delete('/api/lessons/:id', (req, res) => {
+  Lessons
     .findByIdAndRemove(req.params.id)
-    .then(students => res.status(204).end())
+    .then(lessons => res.status(204).end())
     .catch(err => res.status(500).json({ message: 'Internal server error' }));
 });
 
-module.exports = {router};
+module.exports = { router };
