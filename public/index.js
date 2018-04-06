@@ -28,10 +28,10 @@ function watchCreateAccountSubmit() {
       }),
       dataType: 'json',
       success: function() {
-      requestJWT(username, email, password)
+        requestJWT(username, email, password);
       },
       error: function(err) {
-        console.info('There is an error');
+        $('#registration-errors').prop('hidden', false);
         console.error(err);
         if (err.responseJSON.message === 'Username already taken') {
           $('#registration-errors').html(`<div class="ui error message"><ul class="list"><li>The username already exists. Please try a different one.</li></ul>
@@ -77,12 +77,13 @@ function requestJWT(username, email, password) {
         headers: {
           'Authorization': "Bearer " + localStorage.getItem('token')
         },
-        success: window.location.href = "/feedback"
+        success: $('#registration-success').prop('hidden', false)
       })
     },
     error: function(err) {
-      console.info('Password is incorrect!');
       console.error(err);
+      $('#registration-errors').html(`<div class="ui error message"><ul class="list"><li>There was an error. Please try again.</li></ul>
+          </div>`);
     } 
   });
 }

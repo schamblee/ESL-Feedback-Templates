@@ -7,6 +7,23 @@ h2 {
   color: white;
 }
 
+.ui.modal {
+  display: none;
+}
+
+#info {
+  font-size: 13px;
+  font-weight: normal;
+}
+
+#steps {
+  font-size: 1.4em;
+}
+
+#welcome-list {
+  font-size: 14px;
+}
+
 #login {
   margin-top: 50px;
 }
@@ -83,6 +100,7 @@ h2 {
 
 .ui.vertical.stripe p {
   font-size: 1.33em;
+  padding-right: 1em;
 }
 
 .ui.vertical.stripe .horizontal.divider {
@@ -156,6 +174,10 @@ h2 {
 @media only screen and (max-width: 700px) {
   .ui.fixed.menu {
     display: none !important;
+  }
+
+  #steps {
+    font-size: 1em;
   }
   
   .secondary.pointing.menu .item,

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <!-- Standard Meta -->
   <meta charset="utf-8">
@@ -19,25 +19,28 @@
   <div class="ui fixed inverted menu">
     <div class="ui container">
       <a href="/" class="header item">
-        <img class="logo" src="https://freeiconshop.com/wp-content/uploads/edd/apple-flat-1.png">
+        <img class="logo" src="https://freeiconshop.com/wp-content/uploads/edd/apple-flat-1.png" alt="logo">
           &nbsp 5 Apple Feedback
       </a>
       <div class="right item">
-        <a id="sign-out" class="ui green button">Sign Out</a>
+        <div class="ui buttons">
+          <button title="Click for instructions" id="help" class="ui basic green button">Help</button>
+          <button title="Sign Out" id="sign-out" class="ui green button">Sign Out</button>
+        </div>
       </div>
     </div>
   </div>
   <div class="ui vertical masthead left aligned segment">
     <div class="ui vertical stripe segment">
       <div class="ui text container">
-      <div id="welcome-message" class="ui info green message transition">
+      <div id="welcome-message" class="ui positive message transition">
         <i class="close icon"></i>
         <div class="header">Welcome to 5 Apple Feedback</div>
-        <ul class="list">
-          <li>Enter your <a href="https://t.vipkid.com.cn/classrooms">VIPKID classroom</a> 
+        <ul id="welcome-list" class="list">
+          <li>Enter your <a target="_blank" href="https://t.vipkid.com.cn/classrooms">VIPKID classroom</a> 
           <li>Copy and paste the classroom link below</li> 
-          <li>Save student information</li>
-          <li>Click "Add Feedback" to copy and save your feedback for your class.</li>
+          <li>Click <b>Add New Student</b> to save student information</li>
+          <li>Click <b>Add Feedback</b> to copy and save your feedback for your class.</li>
         </ul>
       </div>
       </div>
@@ -66,10 +69,10 @@
         </div>
         <div class="field">
           <div class="ui buttons">
-          <div id="addNewStudent" class="ui tiny green button">Add New Student</div><br>
-          <div class="ui tiny green basic button">
+          <button title="Add a New Student" id="addNewStudent" class="ui tiny green button">Add New Student</button><br>
+          <button title="View Saved Students" class="ui tiny green basic button">
               View Students
-          </div>
+          </button>
           </div>
         </div>
           <button class="ui orange button js-submit addFeedback" type="submit">Add Feedback</button>
@@ -79,7 +82,7 @@
       <table id="feedbackTable" class="ui celled table">
         <thead class="title">
             <tr>
-                <th>Saved Feedback
+                <th>Saved Feedback <div id="info">Click below to see your saved feedback.</div></th>
             </tr>
         </thead>
         <tbody id="feedbackTableData">
@@ -116,11 +119,49 @@
       </div>
     </div>
   </div>
-      <section role="region" class="ui modal transition visible js-template-output">
+      <section role="region" class="ui modal transition visible js-template-output"aria-live="polite" hidden>
     </section>
-    <section role="region" class="ui modal transition visible studentForm">
+    <section role="region" class="ui modal transition visible studentForm" aria-live="polite" hidden>
+      <i class="close icon"></i><div class="header">Student Info</div>
+      <div class="content">
+      <form id="studentForm" class="ui form studentForm">
+        <h4 class="ui dividing header">Save Information About Your Student</h4>
+        <div class="field">
+          <label for="studentName">Name (displayed in student's feedback)</label>
+          <input id="studentName" class="studentName" placeholder="Bao Bao" required>
+        </div>
+        <div class="field">
+          <label for="studentNickName">Nick Name (for your records)</label>
+          <input id="studentNickName" class="studentNickName" placeholder="Bao Bao (Level 2)">
+        </div>
+        <div class="field">
+          <input type="radio" name="pronoun" value="boy" required> Boy
+          <input type="radio" name="pronoun" value="girl" required> Girl
+        </div>
+        <div class="field">
+          <label for="studentNotes">Student Notes (for your records)</label>
+          <textarea id="studentNotes" class="studentNickName" placeholder="Lots of energy! Bao Bao enjoys the 'build a monster' reward system."></textarea>
+        </div>
+      <div class="actions">
+        <div title="Cancel" class="ui cancel button">Cancel</div>
+          <button title="Save Student Info" type="submit" class="ui approve blue button saveStudent">Save Student</button>
+      </div>
+    </form>
+  </div>
     </section>
-    <section role="region" class="ui modal transition visible classroomLinkInstructions"></section>
+    <section id="classroomLinkInstructions" class="ui modal transition visible classroomLinkInstructions" aria-live="polite" hidden>
+      <i class="close icon"></i>
+      <div class="header">How to use 5 Apple Feedback</div>
+      <div id="info-content" class="content" aria-live="polite" hidden>
+        <img id="instructionalGif" src="https://media.giphy.com/media/csN3ARPWeFwACe77fc/giphy.gif" alt="How to copy and paste the classroom link">
+        <ol id="steps">
+          <li>Enter your <a target="_blank" href="https://t.vipkid.com.cn/classrooms">VIPKID classroom</a> 
+          <li>Copy and paste the classroom link below</li> 
+          <li>Click <b>Add New Student</b> to save student information</li>
+          <li>Click <b>Add Feedback</b> to copy and save your feedback for your class.</li>
+        </ol>
+      </div>
+    </section> 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
   <script type="text/javascript" src="dist/semantic.min.js"></script>
   <script type="text/javascript" src="feedback.js"></script>

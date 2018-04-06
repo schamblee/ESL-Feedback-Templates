@@ -4,18 +4,22 @@ const currentUser = localStorage.getItem("user");
 
 
 $(document).ready(function() {
-   $.ajax({
-      type: 'GET',
-      url: `api/feedback/${currentUser}`,
-      contentType: 'application/json',
-      dataType: 'json',
+  loadSavedFeedback();
+ });
+
+function loadSavedFeedback() {
+  $.ajax({
+    type: 'GET',
+    url: `api/feedback/${currentUser}`,
+    contentType: 'application/json',
+    dataType: 'json',
     success: function(resultData) {
       console.log(resultData)
       displayFeedbackTableData(resultData)
       $('.ui.accordion').accordion()
     }
   });
- });
+}
 
 function renderResult(result) {
   return `
@@ -89,18 +93,15 @@ function copyFeedback() {
   /* Copy the text inside the text field */
   document.execCommand("Copy");
 
-  $('#copied-message').html(displayCopiedFeedbackMessage())
+  $('#copied-message').prop('hidden', false)
 }
 
 function getAndDisplayFeedback() {
   $('#templateForm').submit(event => {
     event.preventDefault();
-    console.log(currentUser)
-
-    console.log("submitted")
     $('.js-template-output').prop('hidden', false);
-	getFeedback(displayFeedback);
-  $('.ui.modal.js-template-output').modal('show');
+	  getFeedback(displayFeedback);
+    $('.ui.modal.js-template-output').modal('show');
   });
 }
 
@@ -111,7 +112,6 @@ function watchSaveFeedbackClick() {
     urlRefs = classroomUrl.split('-')
     lessonId = urlRefs[1]
     studentId = urlRefs[2]
-
    $.ajax({
       type: 'POST',
       url: 'api/feedback',
@@ -123,9 +123,9 @@ function watchSaveFeedbackClick() {
         studentId,
         text: $('.feedback-input').val()
     }),
+
     success: function(resultData) {
-      console.log(resultData)
-      console.log(`The currentUser variable is ${currentUser}`)
+      loadSavedFeedback();
       $('#classroom-url').val('');
       $('#student').val('');
     },
@@ -149,50 +149,14 @@ function handleError(err){
 
 function watchInfoClick() {
   $('#instructions').click((event) => { 
-    $('.ui.modal.classroomLinkInstructions').html(`<i class="close icon"></i><div class="header">How to Copy Classroom Link</div>
-      <div id="info-content" class="content">
-        <img id="instructionalGif" src="https://media.giphy.com/media/csN3ARPWeFwACe77fc/giphy.gif" alt="How to copy and paste the classroom link">
-        <ol>
-          <li>Enter your <a href="https://t.vipkid.com.cn/classrooms">VIPKID classroom</a> 
-          <li>Highlight and right-click the link to copy the classroom link</li> 
-          <li>Right-click and paste the classroom link below</li> 
-          <li>Save student information</li>
-          <li>Click "Add Feedback" to copy and save your feedback for your class.</li>
-        </ol>
-      </div>`)
     $('.ui.modal.classroomLinkInstructions').modal('show');
+    $('.ui.modal.classroomLinkInstructions').prop('hidden', false);;
   })
 }
 
 function watchNewStudentClick() {
   $('#addNewStudent').click((event) => {
-    $('.ui.modal.studentForm').html(`<i class="close icon"></i><div class="header">Student Info</div>
-      <div class="content">
-      <form id="studentForm" class="ui form studentForm">
-        <h4 class="ui dividing header">Save Information About Your Student</h4>
-        <div class="field">
-          <label for="studentName">Name</label>
-          <input id="studentName" class="studentName" placeholder="Bao Bao" required>
-        </div>
-        <div class="field">
-          <label for="studentNickName">Nick Name (for your records)</label>
-          <input id="studentNickName" class="studentNickName" placeholder="Bao Bao (Level 2)">
-        </div>
-        <div class="field">
-          <input type="radio" name="pronoun" value="boy" required> Boy
-          <input type="radio" name="pronoun" value="girl" required> Girl
-        </div>
-        <div class="field">
-          <label for="studentNotes">Student Notes (for your records)</label>
-          <textarea id="studentNotes" class="studentNickName" placeholder="Lots of energy! Bao Bao enjoys the 'build a monster' reward system.">
-          </textarea>
-        </div>
-      <div class="actions">
-        <div class="ui cancel button">Cancel</div>
-          <button type="submit" class="ui approve blue button saveStudent">Save Student</button>
-      </div>
-    </form>
-  </div>`)
+    $('.ui.modal.studentForm').prop('hidden', false)
     $('.ui.modal.studentForm').modal('show');
   })
 }
@@ -215,17 +179,15 @@ function displayFeedback(data) {
           <button type="submit" class="ui approve blue button saveFeedback">Save Feedback</button>
       </div>
     </form>
-    <div id="copied-message"></div>
+    <div id="copied-message" aria-live="polite" hidden>
+      <div class="ui success message">
+        <div class="header">
+          Your feedback has been copied!
+        </div>
+        <p>You may now paste your feedback in your classroom.</p>
+      </div>
+    </div>
   </div>`);
-}
-
-function displayCopiedFeedbackMessage() {
-  return `<div class="ui success message">
-  <div class="header">
-    Your feedback has been copied!
-  </div>
-  <p>You may now paste your feedback in your classroom.</p>
-  </div>`
 }
 
 function watchSaveStudent() {
@@ -261,6 +223,13 @@ function watchSaveStudent() {
 })
 }
 
+function watchHelpClick() {
+  $('#help').click( (event) => {
+    event.preventDefault();
+    $('.ui.modal.classroomLinkInstructions').modal('show');
+    $('.ui.modal.classroomLinkInstructions').prop('hidden', false);;
+  })
+}
 
 function watchWelcomeMessageCLose() {
   $('.message .close').on('click', function() {
@@ -296,6 +265,7 @@ function handleFeedback() {
   watchInfoClick();
   watchStudentDropDownClick();
   watchSignOut();
+  watchHelpClick();
 }
 
 $(handleFeedback)
