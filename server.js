@@ -58,6 +58,7 @@ passport.use(jwtStrategy);
 app.use('/api/feedback/', feedbackRouter);
 app.use('/api/templates/', feedbackTemplatesRouter);
 app.use('/api/students/', studentsRouter);
+app.use('/api/student/', studentsRouter);
 app.use('/api/lessons/', lessonsRouter);
 app.use('/api/users/', usersRouter);
 app.use('/api/auth/', authRouter);

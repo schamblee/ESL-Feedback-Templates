@@ -17,7 +17,6 @@ router.get('/:userId', (req, res) => {
   Students
     .find({userId: req.params.userId})
     .then(students => {
-      console.log(students);
       res.json({
         students: students.map(
           (students) => students.serialize())
@@ -30,14 +29,20 @@ router.get('/:userId', (req, res) => {
 });
 
 
-router.get('/api/students/:id', (req, res) => {
+router.get('/api/student/:id', (req, res) => {
+  console.log(res)
   Students
     .findById(req.params.id)
-    .then(students => res.json(students.serialize()))
+    .then(students => {
+      res.json({
+        students: students.map(
+          (students) => students.serialize())
+      });
+    })
     .catch(err => {
       console.error(err);
       res.status(500).json({ message: 'Internal server error' });
-    });
+    })
 });
 
 

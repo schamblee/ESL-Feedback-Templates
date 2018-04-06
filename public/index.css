@@ -168,7 +168,23 @@ h2 {
 }
 
 #info-content {
-  padding-left: 20%;
+  padding-left: 13%;
+}
+
+#notes-data {
+  width: 300px;
+}
+
+#studentsTable {
+  margin-left: -25px;
+}
+
+#editStudent {
+  background:none!important;
+  color:#4183c4;
+  border:none; 
+  padding:0!important;
+  font: inherit;
 }
 
 @media only screen and (max-width: 700px) {

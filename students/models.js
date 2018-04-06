@@ -32,8 +32,12 @@ const studentsSchema = mongoose.Schema({
 
 studentsSchema.methods.serialize = function() {
   return {
-    value: this._id,
-    name: this.name
+    id: this._id,
+    referenceId: this.referenceId,
+    name: this.name,
+    nickName: this.nickName,
+    notes: this.notes,
+    pronoun: this.pronoun
   };
 };
 

@@ -4,10 +4,10 @@ const currentUser = localStorage.getItem("user");
 
 
 $(document).ready(function() {
-  loadSavedFeedback();
+  getSavedFeedback();
  });
 
-function loadSavedFeedback() {
+function getSavedFeedback() {
   $.ajax({
     type: 'GET',
     url: `api/feedback/${currentUser}`,
@@ -21,10 +21,34 @@ function loadSavedFeedback() {
   });
 }
 
-function renderResult(result) {
-  return `
+function getSavedStudents() {
+  $.ajax({
+    type: 'GET',
+    url: `api/students/${currentUser}`,
+    contentType: 'application/json',
+    dataType: 'json',
+    success: function(resultData) {
+      console.log(resultData)
+      displayStudentTableData(resultData);
+    }
+  });
+}
 
-  <div class="ui accordion">
+function getStudentInfo(studentId) {
+    $.ajax({
+    type: 'GET',
+    url: `api/students/${studentId}`,
+    contentType: 'application/json',
+    dataType: 'json',
+    success: function(resultData) {
+      console.log(resultData)
+      displayStudentTableData(resultData);
+    }
+  });
+}
+
+function renderFeedbackResult(result) {
+  return `<div class="ui accordion">
     <tr>
     <div class="title">
       <i class="dropdown icon"></i> 
@@ -39,9 +63,25 @@ function renderResult(result) {
   </div>`;
 };
 
+function renderStudentResult(result) {
+  return `<tr>
+      <td><button id="editStudent" title="Edit student info" data-id="${result.id}"><i class="pencil alternate icon"></i></button></td>
+      <td>${result.name}</td>
+      <td>${result.nickName}</td>
+      <td>${result.pronoun}</td>
+      <td>${result.notes}</td>
+    </tr>
+  `
+}
+
 function displayFeedbackTableData(data) {
-  const results = data.feedback.map((item, index) => renderResult(item));
+  const results = data.feedback.map((item, index) => renderFeedbackResult(item));
   $('#feedbackTableData').html(results);
+}
+
+function displayStudentTableData(data) {
+  const results = data.students.map((item, index) => renderStudentResult(item));
+  $('#student-rows').html(results);
 }
 
 
@@ -60,8 +100,6 @@ let userClosing = 'Thanks for another great lesson and if you enjoyed the lesson
 function getFeedback(callbackFn) {
   $.getJSON(`api/templates/5abd5bcbc835fa1568861076`, callbackFn);
 }
-
-
 
 let feedback = `-name- did a great job today learning the new words 'mom' and 'dad'. \
   -Pronoun- was able to practice drawing a line on the screen. -Pronoun- repeated\
@@ -125,7 +163,7 @@ function watchSaveFeedbackClick() {
     }),
 
     success: function(resultData) {
-      loadSavedFeedback();
+      getSavedFeedback();
       $('#classroom-url').val('');
       $('#student').val('');
     },
@@ -192,15 +230,15 @@ function displayFeedback(data) {
 
 function watchSaveStudent() {
   $('.studentForm').submit((event) => {
-  event.preventDefault();
-  name = $('#studentName').val();
-  pronoun = $('input[name="pronoun"]').val()
-  nickName = $('#studentNickName').val();
-  notes = $('#studentNotes').val();
-  classroomUrl = $('#classroom-url').val();
-  urlRefs = classroomUrl.split('-')
-  studentId = urlRefs[2]
-  $.ajax({
+    event.preventDefault();
+    name = $('#studentName').val();
+    pronoun = $('input[name="pronoun"]').val()
+    nickName = $('#studentNickName').val();
+    notes = $('#studentNotes').val();
+    classroomUrl = $('#classroom-url').val();
+    urlRefs = classroomUrl.split('-')
+    studentId = urlRefs[2]
+    $.ajax({
       type: 'POST',
       url: 'api/students',
       contentType: 'application/json',
@@ -212,22 +250,21 @@ function watchSaveStudent() {
         name: name,
         nickName,
         notes
-    }),
-    success: function(resultData) {
-      console.log(resultData)
-
-    }
-  });
-  $('#studentNameInput').text(name)
-  $('#studentNameInput').removeClass('default')
-})
+      }),
+      success: function(resultData) {
+        console.log(resultData)
+      }
+    });
+    $('#studentNameInput').text(name)
+    $('#studentNameInput').removeClass('default')
+  })
 }
 
 function watchHelpClick() {
   $('#help').click( (event) => {
     event.preventDefault();
     $('.ui.modal.classroomLinkInstructions').modal('show');
-    $('.ui.modal.classroomLinkInstructions').prop('hidden', false);;
+    $('.ui.modal.classroomLinkInstructions').prop('hidden', false);
   })
 }
 
@@ -247,14 +284,36 @@ function watchStudentDropDownClick() {
   })
 }
 
-function watchSignOut(){
-    $('#sign-out').click((event) => {
-        event.preventDefault();
-        localStorage.removeItem("home");
-        sessionStorage.removeItem("authToken");
-        window.location.href = "/"
-    })
+function watchViewStudentsClick() {
+  $('#viewStudentBtn').click((event) => {
+    event.preventDefault();
+    getSavedStudents();
+    $('.ui.modal.viewStudents').modal('show');
+    $('.ui.modal.viewStudents').prop('hidden', false);
+  })
 }
+
+function watchSignOut(){
+  $('#sign-out').click((event) => {
+    event.preventDefault();
+    localStorage.removeItem("home");
+    sessionStorage.removeItem("authToken");
+    window.location.href = "/"
+  })
+}
+
+function watchEditStudent() {
+  $('#student-rows').on('click', '#editStudent', (event) => {
+    event.preventDefault();
+    console.log("click")
+    $('.ui.modal.viewStudents').prop('hidden', true);
+    $('.ui.modal.editStudents').modal('show');
+    $('.ui.modal.editStudents').prop('hidden', false);
+    getStudentInfo();
+  })
+}
+
+function 
 
 function handleFeedback() {
   getAndDisplayFeedback();
@@ -266,6 +325,8 @@ function handleFeedback() {
   watchStudentDropDownClick();
   watchSignOut();
   watchHelpClick();
+  watchViewStudentsClick();
+  watchEditStudent();
 }
 
 $(handleFeedback)
