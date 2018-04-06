@@ -15,7 +15,7 @@ const { localAuth, createAuthToken } = require('../authConfig')
 router.use(bodyParser.json());
 
 
-router.get('/api/feedbackTemplates', (req, res) => {
+router.get('/', (req, res) => {
   console.log("fetching feedback templates");
   FeedbackTemplates
     .find()
@@ -32,7 +32,7 @@ router.get('/api/feedbackTemplates', (req, res) => {
     });
 });
 
-router.get('/api/feedbackTemplates/:id', (req, res) => {
+router.get('/:id', (req, res) => {
   FeedbackTemplates
     .findById(req.params.id)
     .then(feedbackTemplates => res.json(feedbackTemplates.serialize()))
@@ -43,7 +43,7 @@ router.get('/api/feedbackTemplates/:id', (req, res) => {
 });
 
 
-router.post('/api/feedbackTemplates', (req, res) => {
+router.post('/', (req, res) => {
 
   const requiredFields = ['text'];
   for (let i = 0; i < requiredFields.length; i++) {
@@ -68,7 +68,7 @@ router.post('/api/feedbackTemplates', (req, res) => {
 });
 
 
-router.put('/api/feedbackTemplates/:id', (req, res) => {
+router.put('/:id', (req, res) => {
   // ensure that the id in the request path and the one in request body match
   if (!(req.params.id && req.body.id && req.params.id === req.body.id)) {
     const message = (
@@ -97,7 +97,7 @@ router.put('/api/feedbackTemplates/:id', (req, res) => {
     .catch(err => res.status(500).json({ message: 'Internal server error' }));
 });
 
-router.delete('/api/feedbackTemplates/:id', (req, res) => {
+router.delete('/:id', (req, res) => {
   FeedbackTemplates
     .findByIdAndRemove(req.params.id)
     .then(feedbackTemplates => res.status(204).end())

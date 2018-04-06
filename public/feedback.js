@@ -54,7 +54,7 @@ let userClosing = 'Thanks for another great lesson and if you enjoyed the lesson
 // use jQuery's AJAX functionality to make a call
 // to the server and then run the callbackFn 
 function getFeedback(callbackFn) {
-  $.getJSON(`api/feedbackTemplates/5abd5bcbc835fa1568861076`, callbackFn);
+  $.getJSON(`api/templates/5abd5bcbc835fa1568861076`, callbackFn);
 }
 
 
@@ -172,11 +172,11 @@ function watchNewStudentClick() {
         <h4 class="ui dividing header">Save Information About Your Student</h4>
         <div class="field">
           <label for="studentName">Name</label>
-          <input id="studentName" class="studentName" required>
+          <input id="studentName" class="studentName" placeholder="Bao Bao" required>
         </div>
         <div class="field">
           <label for="studentNickName">Nick Name (for your records)</label>
-          <input id="studentNickName" class="studentNickName">
+          <input id="studentNickName" class="studentNickName" placeholder="Bao Bao (Level 2)">
         </div>
         <div class="field">
           <input type="radio" name="pronoun" value="boy" required> Boy
@@ -184,7 +184,8 @@ function watchNewStudentClick() {
         </div>
         <div class="field">
           <label for="studentNotes">Student Notes (for your records)</label>
-          <textarea id="studentNotes" class="studentNickName"></textarea>
+          <textarea id="studentNotes" class="studentNickName" placeholder="Lots of energy! Bao Bao enjoys the 'build a monster' reward system.">
+          </textarea>
         </div>
       <div class="actions">
         <div class="ui cancel button">Cancel</div>

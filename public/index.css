@@ -11,6 +11,10 @@ h2 {
   margin-top: 50px;
 }
 
+#feedbackTable {
+  width: 100%;
+}
+
 .ui.vertical.segment.intro {
     background-image: url('https://ak4.picdn.net/shutterstock/videos/1007071684/thumb/12.jpg?i10c=img.resize(height:160)');
     background-repeat: no-repeat;
@@ -112,6 +116,7 @@ h2 {
 
 #feedback-input {
   width: 600px;
+  max-width: 100%;
 }
 
 .feedbackTemplate {
