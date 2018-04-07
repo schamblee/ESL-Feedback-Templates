@@ -31,10 +31,10 @@ function getSavedStudents(callbackFn) {
   });
 }
 
-function getStudentInfo(callbackFn) {
+function getStudentInfo(studentId, callbackFn) {
     $.ajax({
     type: 'GET',
-    url: `api/students/`,
+    url: `api/students/${studentId}`,
     contentType: 'application/json',
     dataType: 'json',
     success: callbackFn
@@ -241,7 +241,7 @@ function watchSaveStudent() {
     if (id.length > 0) {
       $.ajax({
         type: 'PUT',
-        url: `api/students/`,
+        url: `api/students/${id}`,
         contentType: 'application/json',
         dataType: 'json',
         data: JSON.stringify({
