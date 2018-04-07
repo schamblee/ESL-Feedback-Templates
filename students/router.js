@@ -13,7 +13,7 @@ const { localAuth, createAuthToken } = require('../authConfig')
 
 router.use(bodyParser.json());
 
-router.get('/:userId', (req, res) => {
+router.get('/user/:userId', (req, res) => {
   Students
     .find({userId: req.params.userId})
     .then(students => {
@@ -29,14 +29,13 @@ router.get('/:userId', (req, res) => {
 });
 
 
-router.get('/api/student/:id', (req, res) => {
-  console.log(res)
+router.get('/:id', (req, res) => {
+  console.log(res.body)
   Students
     .findById(req.params.id)
-    .then(students => {
+    .then(student => {
       res.json({
-        students: students.map(
-          (students) => students.serialize())
+        student: student.serialize()
       });
     })
     .catch(err => {

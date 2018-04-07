@@ -2,7 +2,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 
-const { FeedbackTemplates } = require('./models');
+const { Templates } = require('./models');
 
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
@@ -17,13 +17,13 @@ router.use(bodyParser.json());
 
 router.get('/', (req, res) => {
   console.log("fetching feedback templates");
-  FeedbackTemplates
+  Templates
     .find()
-    .then(feedbackTemplates => {
-      console.log(feedbackTemplates);
+    .then(templates => {
+      console.log(templates);
       res.json({
-        feedbackTemplates: feedbackTemplates.map(
-          (feedbackTemplates) => feedbackTemplates.serialize())
+        templates: templates.map(
+          (templates) => templates.serialize())
       });
     })
     .catch(err => {
@@ -33,9 +33,29 @@ router.get('/', (req, res) => {
 });
 
 router.get('/:id', (req, res) => {
-  FeedbackTemplates
+  console.log(req.params.id)
+  Templates
     .findById(req.params.id)
-    .then(feedbackTemplates => res.json(feedbackTemplates.serialize()))
+    .then(template => {
+      res.json({
+        template: template.serialize()
+      });
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({ message: 'Internal server error' });
+    });
+});
+
+router.get('/ref/:referenceId', (req, res) => {
+  Templates
+    .find({referenceId: req.params.referenceId})
+    .then(template => {
+      res.json({
+        template: template.map(
+          (template) => template.serialize())
+      });
+    })
     .catch(err => {
       console.error(err);
       res.status(500).json({ message: 'Internal server error' });
@@ -45,7 +65,7 @@ router.get('/:id', (req, res) => {
 
 router.post('/', (req, res) => {
 
-  const requiredFields = ['text'];
+  const requiredFields = ['code'];
   for (let i = 0; i < requiredFields.length; i++) {
     const field = requiredFields[i];
     if (!(field in req.body)) {
@@ -55,12 +75,14 @@ router.post('/', (req, res) => {
     }
   }
 
-  FeedbackTemplates
+  Templates
     .create({
-      lessonId: req.body.lessonId,
-      text: req.body.text
+      code: req.body.code,
+      name: req.body.name,
+      text: req.body.text,
+      referenceId: req.body.referenceId
     })
-    .then(feedbackTemplates => res.status(201).json(feedbackTemplates.serialize()))
+    .then(templates => res.status(201).json(templates.serialize()))
     .catch(err => {
       console.error(err);
       res.status(500).json({ message: 'Internal server error' });
@@ -82,7 +104,7 @@ router.put('/:id', (req, res) => {
   // if the user sent over any of the updatableFields, we udpate those values
   // in document
   const toUpdate = {};
-  const updateableFields = ['text'];
+  const updateableFields = ['text', "name", "referenceId"];
 
   updateableFields.forEach(field => {
     if (field in req.body) {
@@ -90,17 +112,17 @@ router.put('/:id', (req, res) => {
     }
   });
 
-  FeedbackTemplates
+  Templates
     // all key/value pairs in toUpdate will be updated -- that's what `$set` does
     .findByIdAndUpdate(req.params.id, { $set: toUpdate })
-    .then(feedbackTemplates => res.status(204).end())
+    .then(templates => res.status(204).end())
     .catch(err => res.status(500).json({ message: 'Internal server error' }));
 });
 
 router.delete('/:id', (req, res) => {
-  FeedbackTemplates
+  Templates
     .findByIdAndRemove(req.params.id)
-    .then(feedbackTemplates => res.status(204).end())
+    .then(templates => res.status(204).end())
     .catch(err => res.status(500).json({ message: 'Internal server error' }));
 });
 

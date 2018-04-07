@@ -51,9 +51,10 @@
             <form role="form" id="templateForm" class="ui form">
               <div class="fields">
                 <div class="field">
-                  <label for="classroom-url">Paste the Classroom Link 
+                  <label for="classroom-url">Paste the Classroom Link
                     <a id="instructions" href="#">
                       <i class="question circle outline icon"></i></a>:
+                      (demo: https://t.vipkid.com.cn/classrooms/89520009-4483531-842843)
                   </label>
                   <div class="ui labeled input">
                     <div class="ui label">http://</div>
@@ -64,12 +65,9 @@
               </div>
               <div class="field">
                 <label for="student">Student Name:</label>
-                <div id="student" class="ui search selection dropdown">
-                  <input  type="hidden" name="student">
-                  <i class="dropdown icon"></i>
-                  <div id="studentNameInput" class="default text">Select Student</div>
-                  <div class="menu"></div>
-                </div>   
+                <select id="student" class="ui dropdown studentNameInput" required>
+                  <option value="">Create or Select a Student</option>
+                </select>
               </div>
               <div class="field">
                 <div class="ui buttons">
@@ -115,8 +113,7 @@
               <div class="three wide column">
                 <h4 class="ui inverted header">Follow Us</h4>
                 <div class="ui inverted link list">
-                  <p class="item"><i class="twitter icon"></i> @5applefeedback</p>
-                  <p class="item"><i class="facebook icon"></i>5 Apple Feedback</p>
+                  <a href="https://twitter.com/5AppleFeedback" class="item"><i class="twitter icon"></i> @5applefeedback</a>
                 </div>
               </div>
               <div class="seven wide column">
@@ -128,10 +125,37 @@
         </footer>
         <!-- Hidden Modals -->
         <section role="region" class="ui modal transition visible js-template-output" aria-live="polite" hidden>
+          <i class="close icon"></i>
+          <div class="header">Feeback</div>
+          <div class="content">
+            <form id="templateForm" class="ui form feedbackTemplate">
+              <h4 id="templateModalHeader" class="ui dividing header"></h4>
+              <div class="field">
+                <label>Feedback Template</label>
+                <textarea id="feedback-input" class="feedback-input">
+                </textarea>
+              </div>
+              <div class="actions modal-action">
+                <div class="ui cancel button">Cancel</div>
+                <div class="ui green right labeled icon button copyFeedback" onclick="copyFeedback()">
+                  <i class="copy icon"></i>Copy Feedback</div>
+                  <button type="submit" class="ui approve blue button saveFeedback">Save Feedback</button>
+              </div>
+            </form>
+            <div id="copied-message" aria-live="polite" hidden>
+              <div class="ui success message">
+                <div class="header">
+                  Your feedback has been copied!
+                </div>
+                <p>You may now paste your feedback in your classroom.</p>
+              </div>
+            </div>
+          </div>
         </section>
-        <section role="region" class="ui modal transition visible studentForm" aria-live="polite" hidden>
+        <section role="region" id="studentModalForm" class="ui modal transition visible studentForm" aria-live="polite" hidden>
           <i class="close icon"></i>
           <div class="header">Student Info</div>
+          <div id="studentId" hidden></div>
           <div class="content">
             <form id="studentForm" class="ui form studentForm">
               <h4 class="ui dividing header">Save Information About Your Student</h4>
@@ -150,8 +174,7 @@
               <div class="field">
                 <label for="studentNotes">Student Notes (for your records)</label>
                 <textarea id="studentNotes" class="studentNickName" 
-                  placeholder="Lots of energy! Bao Bao enjoys the 'build a monster' reward system.">
-                </textarea>
+                  placeholder="Work on pronunciation of short vowel sounds. Bao Bao enjoys the 'build a monster' reward system."></textarea>
               </div>
               <div class="actions">
                 <div title="Cancel" class="ui cancel button">Cancel</div>
@@ -195,40 +218,6 @@
               </thead>
               <tbody id="student-rows"></tbody>
             </table>
-          </div>
-        </section>
-        <section role="region" id="editStudentModal" 
-          class="ui modal transition visible editStudents" 
-          aria-live="polite" hidden>
-          <i class="close icon"></i>
-          <div class="header">Edit Student</div>
-          <div id="editStudentContent" class="content">
-            <form id="studentFormEdit" class="ui form studentForm">
-              <h4 class="ui dividing header">Save Information About Your Student</h4>
-              <div class="field">
-                <label for="studentNameEdit">Name (displayed in student's feedback)</label>
-                <input id="studentNameEdit" class="studentName" placeholder="Bao Bao" required>
-              </div>
-              <div class="field">
-                <label for="studentNickNameEdit">Nick Name (for your records)</label>
-                <input id="studentNickNameEdit" class="studentNickName" placeholder="Bao Bao (Level 2)">
-              </div>
-              <div class="field">
-                <input type="radio" name="pronounEdit" value="boy" required> Boy
-                <input type="radio" name="pronounEdit" value="girl" required> Girl
-              </div>
-              <div class="field">
-                <label for="studentNotesEdit">Student Notes (for your records)</label>
-                <textarea id="studentNotesEdit" class="studentNickName" 
-                  placeholder="Lots of energy! Bao Bao enjoys the 'build a monster' reward system.">
-                </textarea>
-              </div>
-              <div class="actions">
-                <div title="Cancel" class="ui cancel button">Cancel</div>
-                  <button title="Save Student Info" type="submit" 
-                    class="ui approve blue button saveStudent">Save Student</button>
-              </div>
-            </form>
           </div>
         </section>
       </div>

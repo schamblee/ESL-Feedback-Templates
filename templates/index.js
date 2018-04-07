@@ -1,5 +1,5 @@
 'use strict';
-const { FeedbackTemplates } = require('./models');
+const { Templates } = require('./models');
 const { router } = require('./router');
 
-module.exports = { FeedbackTemplates, router };
+module.exports = { Templates, router };

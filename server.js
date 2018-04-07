@@ -12,8 +12,7 @@ const passport = require('passport');
 const { PORT, DATABASE_URL } = require('./config');
 mongoose.Promise = global.Promise;
 
-const { router: lessonsRouter } = require('./lessons');
-const { router: feedbackTemplatesRouter } = require('./templates');
+const { router: templatesRouter } = require('./templates');
 const { router: feedbackRouter } = require('./feedback');
 const { router: studentsRouter } = require('./students');
 const { router: usersRouter } = require('./users');
@@ -56,10 +55,9 @@ passport.use(localStrategy);
 passport.use(jwtStrategy);
 
 app.use('/api/feedback/', feedbackRouter);
-app.use('/api/templates/', feedbackTemplatesRouter);
+app.use('/api/templates/', templatesRouter);
 app.use('/api/students/', studentsRouter);
 app.use('/api/student/', studentsRouter);
-app.use('/api/lessons/', lessonsRouter);
 app.use('/api/users/', usersRouter);
 app.use('/api/auth/', authRouter);
 

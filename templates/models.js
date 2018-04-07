@@ -3,24 +3,34 @@
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
-const feedbackTemplatesSchema = mongoose.Schema({
-  lessonId: { 
-    type: String, 
-    required: true
-  },
+const templatesSchema = mongoose.Schema({
   text: {
     type: String, 
     required: true
+  },
+  code: {
+    type: String, 
+    required: true
+  },
+  name: { 
+    type: String, 
+    required: true
+  },
+  referenceId: {
+    type: String, 
+    default: ''
   }
 });
 
-feedbackTemplatesSchema.methods.serialize = function() {
+templatesSchema.methods.serialize = function() {
   return {
     id: this._id,
-    lessonId: this.lessonId,
-    text: this.text
+    code: this.code,
+    name: this.name,
+    text: this.text,
+    referenceId: this.referenceId
   };
 };
 
-const FeedbackTemplates = mongoose.model('FeedbackTemplates', feedbackTemplatesSchema);
-module.exports = { FeedbackTemplates };
+const Templates = mongoose.model('Templates', templatesSchema);
+module.exports = { Templates };

@@ -31,10 +31,7 @@ router.get('/:userId', (req, res) => {
     });
 });
 
-
 router.post('/', (req, res) => {
-
-
   const requiredFields = ['lessonId', 'studentId', 'text'];
   for (let i = 0; i < requiredFields.length; i++) {
 
@@ -59,8 +56,7 @@ router.post('/', (req, res) => {
     });
 });
 
-
-/* router.put('/:id', (req, res) => {
+router.put('/:id', (req, res) => {
   // ensure that the id in the request path and the one in request body match
   if (!(req.params.id && req.body.id && req.params.id === req.body.id)) {
     const message = (
@@ -94,6 +90,6 @@ router.delete('/:id', (req, res) => {
     .findByIdAndRemove(req.params.id)
     .then(students => res.status(204).end())
     .catch(err => res.status(500).json({ message: 'Internal server error' }));
-});*/
+});
 
 module.exports = {router};
