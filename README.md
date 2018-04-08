@@ -26,21 +26,19 @@ Create Account Form:
 
 ## Built With
 
-Frontend:
+Front-End:
 * HTML
 * CSS
-* JavaScript
-* jQuery
-* Semantic UI
+* JavaScript (with jQuery)
+* Semantic UI CSS Framework
 
 Backend:
 * Node.js
 * Express
-* Mocha/Chai
-* MongoDB/Mlab
+* MongoDB / Mongoose
 * Heroku
 * JWT
-* Passport
+* Passport.js and JWT for use authentication
 
 ## Features
 
