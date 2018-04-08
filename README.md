@@ -4,7 +4,7 @@ Lesson feedback generator for [VIPKID](https://t.vipkid.com.cn/activity/popup?re
 
 ## Motivation
 
-As an online ESL (English as a second language) teacher for [VIPKID](https://t.vipkid.com.cn/activity/popup?refereeId=4057772&refersourceid=a01), I often have to re-write lesson feedback after each class because I teach the same lessons from the curriculum. Most teachers store their feedback in a spreadsheet or document so that they can find the feedback they have written in the past and re-use it, updating the name and details for the student. I wanted to create something easier to use to offer teachers. 5 Apple Feedback generates well-crafted lesson feedback that is custom-written for VIPKID lessons. The app uses the provided student information to tailor the feedback template to the student. 
+As an online ESL (English as a second language) teacher for [VIPKID](https://t.vipkid.com.cn/activity/popup?refereeId=4057772&refersourceid=a01), I often have to re-write lesson feedback after each class because I teach the same lessons from the curriculum multiple times in a week. Most teachers store their feedback in a spreadsheet or document so that they can find the feedback they have written in the past and re-use it, updating the name and details for the student. I wanted to create something easier to use to offer teachers. 5 Apple Feedback generates well-crafted lesson feedback that is custom-written for VIPKID lessons. The app uses the provided student information to tailor the feedback template to the student. 
 
 ## Screenshots
 
