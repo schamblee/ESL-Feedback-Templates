@@ -36,7 +36,7 @@ function getSavedStudents(callbackFn) {
 }
 
 function getStudentInfo(studentId, callbackFn) {
-    $.ajax({
+  $.ajax({
     type: 'GET',
     url: `api/students/${studentId}`,
     contentType: 'application/json',
@@ -48,7 +48,7 @@ function getStudentInfo(studentId, callbackFn) {
 }
 
 function getTemplateData(studentId, referenceId, student, pronoun) {
-    $.ajax({
+  $.ajax({
     type: 'GET',
     url: `api/templates/ref/${referenceId}`,
     contentType: 'application/json',
@@ -56,6 +56,19 @@ function getTemplateData(studentId, referenceId, student, pronoun) {
     success: function(result) {
       displayTemplateModal(result, studentId, student, pronoun);
     },
+    error: handleError,
+    beforeSend: setHeader
+  });
+}
+
+function deleteSavedFeedback(id) {
+  console.log('delete')
+  $.ajax({
+    type: 'DELETE',
+    url: `api/feedback/${id}`,
+    contentType: 'application/json',
+    dataType: 'json',
+    success: getSavedFeedback,
     error: handleError,
     beforeSend: setHeader
   });
@@ -75,10 +88,12 @@ function getLessonCode(id, templateId) {
   $.getJSON(`api/templates/${templateId}`, 
     function success (data) { 
       return data.template.code ?
-      $(`#templateLessonCode-${id}`).text(data.template.code) :
+      $(`#templateLessonCode-${id}`).text(`VIPKID Lesson Code: ${data.template.code}`) :
       alert("There was an error loading the lesson code. Please try again!")
     });
 }
+
+
 
 function renderFeedbackResult(result) {
   let id = result.id
@@ -95,6 +110,12 @@ function renderFeedbackResult(result) {
     </div>
       <div class="content">
         <p class="savedFeedback">${result.text}</p>
+        <div data-id="${id}" class="ui tiny green button editSavedFeedback">
+          <i class="window close outline icon"></i> Edit
+        </div>
+        <div data-id="${id}" class="negative ui tiny button deleteSavedFeedback">
+          <i class="window close outline icon"></i> Delete
+        </div>
       </div>
     </tr>
   </div>`;
@@ -112,6 +133,7 @@ function renderStudentResult(result) {
 }
 
 function renderTemplateData(data, student, pronoun) {
+  //Alter template text to include the student's name and gender
   console.log(data)
   let boyMapObj = {
     "-Pronoun-": "He",
@@ -129,6 +151,7 @@ function renderTemplateData(data, student, pronoun) {
     "-Possessive-": "Her",
     "-object-": "her"
   }
+
   let template = data.template[0].text.replace(/-name-|-pronoun-|-Pronoun-|-possessive-|-object-|-Possessive-/gi, 
     (matched) => { 
       if (pronoun === "boy") {
@@ -142,7 +165,8 @@ function renderTemplateData(data, student, pronoun) {
 
 function displayTemplateModal(data, studentId, student, pronoun) {
   const result = renderTemplateData(data, student, pronoun);
-  $('#templateModalHeader').html(`<div id="code" data-id="${data.template[0].id}">${data.template[0].code}</div><div id="name" data-id="${studentId}">${student}</div>`)
+  $('#templateModalHeader').html(`<div id="name" data-id="${studentId}">${student}</div>
+    <div id="code" data-id="${data.template[0].id}">${data.template[0].code}</div>`)
   $('.js-template-output').prop('hidden', false);
   $('.ui.modal.js-template-output').modal('show');
   $('#feedback-input').html(result);
@@ -183,15 +207,15 @@ function displayStudentDropdownData(data) {
 }
 
 function displayEditStudentModal(data) {
-  $('#studentName').val(data.student.name);
-  $('#studentId').text(data.student.id);
-  $('input[name="pronoun"]:selected').val(data.student.pronoun);
-  $('#studentNickName').val(data.student.nickName);
-  $('#studentNotes').val(data.student.notes);
+  $('#studentNameEdit').val(data.student.name);
+  $('#studentIdEdit').text(data.student.id);
+  $(`input:radio[name="pronounEdit"]`).prop('checked', true);
+  $('#studentNickNameEdit').val(data.student.nickName);
+  $('#studentNotesEdit').val(data.student.notes);
   $('.ui.modal.viewStudents').prop('hidden', true);
   $('.ui.modal.viewStudents').prop('hidden', true);
-  $('.ui.modal.studentForm').modal('show');
-  $('.ui.modal.studentForm').prop('hidden', false);
+  $('.ui.modal.studentFormEdit').modal('show');
+  $('.ui.modal.studentFormEdit').prop('hidden', false);
 }
 
 
@@ -210,7 +234,7 @@ function watchAddFeedbackClick() {
     studentName = $('option[name="student"]:selected').data('name')
     studentId = $('option[name="student"]:selected').data('id')
     pronoun = $('option[name="student"]:selected').data('pronoun')
-    referenceId = urlRefs[1];
+    referenceId = urlRefs[2];
 	  getTemplateData(studentId, referenceId, studentName, pronoun);
   });
 }
@@ -258,7 +282,7 @@ function handleError(err) {
     );
 }
 
-function watchSaveStudent() {
+function watchUpdateStudent() {
   $('.studentForm').submit((event) => {
     event.preventDefault();
     name = $('#studentName').val();
@@ -266,35 +290,42 @@ function watchSaveStudent() {
     id = $('#studentId').text();
     pronoun = $('input[name="pronoun"]:selected').val()
     nickName = $('#studentNickName').val();
+    notes = $('#studentNotes').val();  
+    $.ajax({
+      type: 'PUT',
+      url: `api/students/${id}`,
+      contentType: 'application/json',
+      dataType: 'json',
+      data: JSON.stringify({
+      id,
+      pronoun: pronoun,
+      userId: currentUser,
+      name: name,
+      nickName,
+      notes
+    }),
+    success: function(resultData) {
+    console.log(resultData)
+    },
+    error: handleError,
+    beforeSend: setHeader
+    }); 
+  }); 
+}
+
+function watchSaveStudent() {
+  $('.saveStudent').click((event) => {
+    event.preventDefault();
+    name = $('#studentName').val();
+    editEvent = $('#studentName').data('edit');
+    id = $('#studentId').text();
+    pronoun = $('input[name="pronoun"]:checked').val()
+    nickName = $('#studentNickName').val();
     notes = $('#studentNotes').val();
     classroomUrl = $('#classroom-url').val();
     urlRefs = classroomUrl.split('-')
     studentRefId = urlRefs[2]
-
-
-    if (id.length > 0) {
-      $.ajax({
-        type: 'PUT',
-        url: `api/students/${id}`,
-        contentType: 'application/json',
-        dataType: 'json',
-        data: JSON.stringify({
-          id,
-          pronoun: pronoun,
-          userId: currentUser,
-          name: name,
-          nickName,
-          notes
-        }),
-        success: function(resultData) {
-        console.log(resultData)
-        },
-        error: handleError,
-        beforeSend: setHeader
-      }); 
-    } 
-    else {
-      $.ajax({
+    $.ajax({
       type: 'POST',
       url: 'api/students',
       contentType: 'application/json',
@@ -313,9 +344,7 @@ function watchSaveStudent() {
       error: handleError,
       beforeSend: setHeader
     });
-    $('#studentName').data('edit');
-  }
-});
+  })
 }
 
 function watchInfoClick() {
@@ -367,8 +396,34 @@ function watchSignOutClick(){
 function watchEditStudentClick() {
   $('#student-rows').on('click', '.editStudent', (event) => {
     event.preventDefault();
+    console.log("click")
     let studentId= $(event.currentTarget).data('id');
     getStudentInfo(studentId, displayEditStudentModal);
+  });
+}
+
+function watchDeleteSavedFeedbackClick() {
+  $('#feedbackTable').on('click', '.deleteSavedFeedback', (event) => {
+    event.preventDefault();
+    let id = $(event.currentTarget).data('id')
+    $('#deleteFeedbackId').text(id)
+    $('.ui.modal.confirmDeleteFeedback').modal('show');
+    $('.ui.modal.confirmDeleteFeedback').prop('hidden', false);
+  })
+}
+
+function watchDeleteSavedFeedbackConfirmedClick() {
+  $('#deleteSavedFeedbackConfirmed').click((event) => {
+    event.preventDefault();
+    let id = $('#deleteFeedbackId').text();
+    deleteSavedFeedback(id);
+  });
+}
+
+function watchDemoClick() {
+  $('.demoUrl').click((event) => {
+    let url = $(event.currentTarget).data('url')
+    $('#classroom-url').val(url)
   });
 }
 
@@ -383,6 +438,9 @@ function handleFeedback() {
   watchHelpClick();
   watchViewStudentsClick();
   watchEditStudentClick();
+  watchDeleteSavedFeedbackClick();
+  watchDeleteSavedFeedbackConfirmedClick();
+  watchDemoClick();
 }
 
 $(handleFeedback)

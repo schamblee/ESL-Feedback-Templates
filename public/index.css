@@ -191,6 +191,19 @@ h2 {
   display: inline-block;
 }
 
+.editSavedFeedback {
+  margin-left: 1.3em!important;
+}
+
+.confirmDeleteMessageActions, .deleteFeedbackModalMessage {
+  text-align: center;
+}
+
+#name {
+  font-size: x-large;
+  margin-bottom: .5em;
+}
+
 @media only screen and (max-width: 700px) {
   .ui.fixed.menu {
     display: none !important;
