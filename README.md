@@ -1,6 +1,6 @@
 # 5 Apple Feedback
 
-Lesson feedback generator for [VIPKID](https://t.vipkid.com.cn/activity/popup?refereeId=4057772&refersourceid=a01) ESL teachers. Stores student and creates custom feedback templates to save teachers time writing their feedback.
+Lesson feedback generator for [VIPKID](https://t.vipkid.com.cn/activity/popup?refereeId=4057772&refersourceid=a01) ESL teachers. Stores student information and creates custom feedback templates to save teachers time writing their feedback.
 
 ## Motivation
 
