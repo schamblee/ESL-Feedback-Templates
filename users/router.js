@@ -2,7 +2,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 
-const {User} = require('./models');
+const { User } = require('./models');
 
 const router = express.Router();
 
@@ -106,7 +106,7 @@ router.post('/', jsonParser, (req, res) => {
         return Promise.reject({
           code: 422,
           reason: 'ValidationError',
-          message: 'Username already taken',
+          message: 'Username and/or email already taken',
           location: 'username'
         });
       }
@@ -144,4 +144,4 @@ router.get('/', (req, res) => {
     .catch(err => res.status(500).json({message: 'Internal server error'}));
 });
 
-module.exports = {router};
+module.exports = { router };

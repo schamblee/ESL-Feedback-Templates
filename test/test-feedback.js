@@ -8,11 +8,13 @@ mongoose.Promise = global.Promise;
 const should = chai.should();
 const expect = chai.expect
 
-const { Feedback } = require('../models-feedback');
+const { Feedback } = require('../feedback');
 const { closeServer, runServer, app } = require('../server');
 const { TEST_DATABASE_URL } = require('../config');
 
 chai.use(chaiHttp);
+
+
 
 // Deletes the entire database.
 function tearDownDb() {
@@ -58,33 +60,6 @@ describe('Feedback API resource', function () {
 
   after(function () {
     return closeServer();
-  });
-
-  describe('GET endpoint', function () {
-
-    it('should return all existing feedback', function () {
-      // strategy:
-      //    1. get back all feedback returned by by GET request to `/api/feedback`
-      //    2. prove res has right status, data type
-      //    3. prove the number of feedback we got back is equal to number
-      //       in db.
-      let res;
-      return chai.request(app)
-        .get('/api/feedback')
-        .then(_res => {
-          res = _res;
-          res.should.have.status(200);
-          // otherwise our db seeding didn't work
-          res.body.feedback.should.have.length.of.at.least(1);
-
-          return Feedback.count();
-        })
-        .then(count => {
-          // the number of returned feedback should be same
-          // as number of feedback in DB
-          expect(res.body.feedback).to.have.lengthOf(count);
-        })
-    });
   });
 
   describe('POST endpoint', function () {

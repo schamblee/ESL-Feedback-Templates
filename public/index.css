@@ -7,8 +7,29 @@ h2 {
   color: white;
 }
 
+.ui.modal {
+  display: none;
+}
+
+#info {
+  font-size: 13px;
+  font-weight: normal;
+}
+
+#steps {
+  font-size: 1.4em;
+}
+
+#welcome-list {
+  font-size: 14px;
+}
+
 #login {
   margin-top: 50px;
+}
+
+#feedbackTable {
+  width: 100%;
 }
 
 .ui.vertical.segment.intro {
@@ -17,6 +38,11 @@ h2 {
     background-attachment: fixed;
     background-position: center; 
     background-size: cover;
+}
+
+.modal-action {
+  position: absolute;
+  right: 10px;
 }
 
 .logo {
@@ -74,6 +100,7 @@ h2 {
 
 .ui.vertical.stripe p {
   font-size: 1.33em;
+  padding-right: 1em;
 }
 
 .ui.vertical.stripe .horizontal.divider {
@@ -107,6 +134,7 @@ h2 {
 
 #feedback-input {
   width: 600px;
+  max-width: 100%;
 }
 
 .feedbackTemplate {
@@ -121,9 +149,68 @@ h2 {
   width: 300px;
 }
 
+.ui.vertical.stripe p {
+  font-size: 1.0em;
+  padding-left: 1em;
+}
+
+
+#templateForm {
+  margin-bottom: 20px;
+}
+
+#welcome-message {
+  margin-bottom: 25px;
+}
+
+#instructionalGif {
+  max-width: 100%;
+}
+
+#info-content {
+  padding-left: 13%;
+}
+
+#notes-data {
+  width: 300px;
+}
+
+#studentsTable {
+  margin-left: -25px;
+}
+
+.editStudent {
+  background:none!important;
+  color:#4183c4;
+  border:none; 
+  padding:0!important;
+  font: inherit;
+}
+
+.templateTableHeader {
+  display: inline-block;
+}
+
+.editSavedFeedback {
+  margin-left: 1.3em!important;
+}
+
+.confirmDeleteMessageActions, .deleteFeedbackModalMessage {
+  text-align: center;
+}
+
+#name {
+  font-size: x-large;
+  margin-bottom: .5em;
+}
+
 @media only screen and (max-width: 700px) {
   .ui.fixed.menu {
     display: none !important;
+  }
+
+  #steps {
+    font-size: 1em;
   }
   
   .secondary.pointing.menu .item,
