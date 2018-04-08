@@ -189,6 +189,7 @@ function displayEditStudentModal(data) {
   $('#studentNickName').val(data.student.nickName);
   $('#studentNotes').val(data.student.notes);
   $('.ui.modal.viewStudents').prop('hidden', true);
+  $('.ui.modal.viewStudents').prop('hidden', true);
   $('.ui.modal.studentForm').modal('show');
   $('.ui.modal.studentForm').prop('hidden', false);
 }
@@ -348,7 +349,7 @@ function watchWelcomeMessageClose() {
 function watchViewStudentsClick() {
   $('#viewStudentBtn').click((event) => {
     event.preventDefault();
-    getSavedStudents();
+    getSavedStudents(displayStudentTableData);
     $('.ui.modal.viewStudents').modal('show');
     $('.ui.modal.viewStudents').prop('hidden', false);
   })
