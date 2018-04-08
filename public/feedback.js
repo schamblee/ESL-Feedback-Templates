@@ -11,7 +11,7 @@ $(document).ready(function() {
 function getSavedFeedback() {
   $.ajax({
     type: 'GET',
-    url: `api/feedback/${currentUser}`,
+    url: `api/feedback/user/${currentUser}`,
     contentType: 'application/json',
     dataType: 'json',
     success: function(resultData) {
@@ -47,14 +47,28 @@ function getStudentInfo(studentId, callbackFn) {
   });
 }
 
-function getTemplateData(studentId, referenceId, student, pronoun) {
+function getTemplateData(referenceId, student, pronoun) {
   $.ajax({
     type: 'GET',
     url: `api/templates/ref/${referenceId}`,
     contentType: 'application/json',
     dataType: 'json',
     success: function(result) {
-      displayTemplateModal(result, studentId, student, pronoun);
+      displayTemplateModal(result, student, pronoun);
+    },
+    error: handleError,
+    beforeSend: setHeader
+  });
+}
+
+function getFeedback(id) {
+  $.ajax({
+    type: 'GET',
+    url: `api/feedback/${id}`,
+    contentType: 'application/json',
+    dataType: 'json',
+    success: function(result) {
+      displayFeedbackModal(result);
     },
     error: handleError,
     beforeSend: setHeader
@@ -94,7 +108,6 @@ function getLessonCode(id, templateId) {
 }
 
 
-
 function renderFeedbackResult(result) {
   let id = result.id
   let date = moment(result.created).format("MMMM Do YYYY")
@@ -111,7 +124,7 @@ function renderFeedbackResult(result) {
       <div class="content">
         <p class="savedFeedback">${result.text}</p>
         <div data-id="${id}" class="ui tiny green button editSavedFeedback">
-          <i class="window close outline icon"></i> Edit
+          <i class="pencil alternate icon"></i> Edit
         </div>
         <div data-id="${id}" class="negative ui tiny button deleteSavedFeedback">
           <i class="window close outline icon"></i> Delete
@@ -163,12 +176,20 @@ function renderTemplateData(data, student, pronoun) {
   return template;
 }
 
-function displayTemplateModal(data, studentId, student, pronoun) {
+function displayFeedbackModal(data) {
+  $('.editSavedFeedback').prop('hidden', false);
+  $('.ui.modal.editSavedFeedback').modal('show');
+  $('#feedback-edit-input').text(data.feedback.text);
+  $('#feedbackIdFeedbackEditModal').text(data.feedback.id);
+  $('#lessonIdFeedbackEditModal').text(data.feedback.lessonId);
+  $('#studentIdFeedbackEditModal').text(data.feedback.studentId);
+}
+
+function displayTemplateModal(data, student, pronoun) {
   const result = renderTemplateData(data, student, pronoun);
-  $('#templateModalHeader').html(`<div id="name" data-id="${studentId}">${student}</div>
-    <div id="code" data-id="${data.template[0].id}">${data.template[0].code}</div>`)
   $('.js-template-output').prop('hidden', false);
   $('.ui.modal.js-template-output').modal('show');
+  $('#templateModalHeaderLesson').html(`<div id="code" data-id="${data.template[0].id}">${data.template[0].code}</div>`)
   $('#feedback-input').html(result);
 }
 
@@ -203,11 +224,13 @@ function displayStudentTableData(data) {
 
 function displayStudentDropdownData(data) {
   const results = data.students.map((item, index) => renderStudentDropDownResult(item));
-  $('#student').html(results);
+  (data.students.length > 0) ? $('#studentList').html(results) :
+    $('#studentList').html(`<option name="student" class="item">Add a Student</option>`)
 }
 
+
 function displayEditStudentModal(data) {
-  $('#studentNameEdit').val(data.student.name);
+  $('#studentNameEdit').text(data.student.name);
   $('#studentIdEdit').text(data.student.id);
   $(`input:radio[name="pronounEdit"]`).prop('checked', true);
   $('#studentNickNameEdit').val(data.student.nickName);
@@ -223,7 +246,7 @@ function copyFeedback() {
   var copyText = document.getElementById("feedback-input");
   copyText.select();
   document.execCommand("Copy");
-  $('#copied-message').prop('hidden', false)
+  $('.copied-message').prop('hidden', false)
 }
 
 function watchAddFeedbackClick() {
@@ -235,20 +258,21 @@ function watchAddFeedbackClick() {
     studentId = $('option[name="student"]:selected').data('id')
     pronoun = $('option[name="student"]:selected').data('pronoun')
     referenceId = urlRefs[2];
-	  getTemplateData(studentId, referenceId, studentName, pronoun);
+    $('#templateModalHeaderName').html(`<div id="name" data-id="${studentId}">${studentName}</div>`)
+	  getTemplateData(referenceId, studentName, pronoun);
   });
 }
 
 function watchSaveFeedbackClick() {
-  $('.js-template-output').on('submit', '#templateForm', function(event) {
+  $('.js-template-output').on('submit', '#templateEditForm', function(event) {
     event.preventDefault();
     classroomUrl = $('#classroom-url').val();
     studentId = $('#name').data('id')
     lessonId = $('#code').data('id')
-    $('#copied-message').prop('hidden', true);
+    $('.copied-message').prop('hidden', true);
     $.ajax({
       type: 'POST',
-      url: 'api/feedback',
+      url: 'api/feedback/',
       contentType: 'application/json',
       dataType: 'json',
       data: JSON.stringify({
@@ -260,7 +284,7 @@ function watchSaveFeedbackClick() {
     success: function(resultData) {
       getSavedFeedback();
       $('#classroom-url').val('');
-      $('#student').val('');
+      $('#student').val('')
     },
     error: handleError,
     beforeSend: setHeader
@@ -283,7 +307,7 @@ function handleError(err) {
 }
 
 function watchUpdateStudent() {
-  $('.studentForm').submit((event) => {
+  $('#studentFormEdit').submit((event) => {
     event.preventDefault();
     name = $('#studentName').val();
     editEvent = $('#studentName').data('edit');
@@ -338,8 +362,8 @@ function watchSaveStudent() {
         nickName,
         notes
       }),
-      success: function(resultData) {
-        console.log(resultData)
+      success: function() {
+        getSavedStudents(displayStudentDropdownData);
       },
       error: handleError,
       beforeSend: setHeader
@@ -427,6 +451,43 @@ function watchDemoClick() {
   });
 }
 
+function watchEditSavedFeedbackClick() {
+  $('#feedbackTable').on('click', '.editSavedFeedback', (event) => {
+    $('.ui.modal.editSavedFeedback').modal('show');
+    $('.ui.modal.editSavedFeedback').prop('hidden', false);
+    let id = $(event.currentTarget).data('id');
+    getFeedback(id)
+  })
+}
+
+function watchUpdateFeedbackClick() {
+  $('#updateFeedbackBtn').click((event) => {
+    event.preventDefault();
+    let id = $('#feedbackIdFeedbackEditModal').text(); 
+    let lessonId = $('#lessonIdFeedbackEditModal').text();
+    let text = $('#feedback-edit-input').text();
+    let studentId = $('#studentIdFeedbackEditModal').text();
+    $.ajax({
+      type: 'PUT',
+      url: `api/feedback/${id}`,
+      contentType: 'application/json',
+      dataType: 'json',
+      data: JSON.stringify({
+      id,
+      lessonId,
+      userId: currentUser,
+      studentId,
+      text: $('.feedback-edit-input').val()
+    }),
+    success: function(resultData) {
+      getSavedFeedback()
+    },
+    error: handleError,
+    beforeSend: setHeader
+    }); 
+  }); 
+}
+
 function handleFeedback() {
   watchAddFeedbackClick();
   watchSaveFeedbackClick();
@@ -441,6 +502,8 @@ function handleFeedback() {
   watchDeleteSavedFeedbackClick();
   watchDeleteSavedFeedbackConfirmedClick();
   watchDemoClick();
+  watchEditSavedFeedbackClick();
+  watchUpdateFeedbackClick();
 }
 
 $(handleFeedback)

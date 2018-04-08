@@ -15,7 +15,7 @@ const { localAuth, createAuthToken } = require('../authConfig')
 router.use(bodyParser.json());
 
 
-router.get('/:userId', (req, res) => {
+router.get('/user/:userId', (req, res) => {
   Feedback
     .find({userId: req.params.userId})
     .then(feedback => {
@@ -29,6 +29,21 @@ router.get('/:userId', (req, res) => {
       console.error(err);
       res.status(500).json({ message: 'Internal server error' });
     });
+});
+
+router.get('/:id', (req, res) => {
+  console.log(res.body)
+  Feedback
+    .findById(req.params.id)
+    .then(feedback => {
+      res.json({
+        feedback: feedback.serialize()
+      });
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({ message: 'Internal server error' });
+    })
 });
 
 router.post('/', (req, res) => {

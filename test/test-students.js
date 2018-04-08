@@ -8,7 +8,7 @@ mongoose.Promise = global.Promise;
 const should = chai.should();
 const expect = chai.expect
 
-const { Students } = require('../models-students');
+const { Students } = require('../students');
 const { closeServer, runServer, app } = require('../server');
 const { TEST_DATABASE_URL } = require('../config');
 
@@ -34,7 +34,7 @@ function seedStudentData() {
       name: faker.lorem.words(),
       nickName: faker.name.firstName(),
       notes: faker.lorem.words(),
-      gender: faker.name.firstName()
+      pronoun: faker.name.firstName()
     });
 
   return Students.insertMany(seedData);
@@ -61,65 +61,6 @@ describe('Students API resource', function () {
     return closeServer();
   });
 
-  describe('GET endpoint', function () {
-
-    it('should return all existing students', function () {
-      // strategy:
-      //    1. get back all student returned by by GET request to `/api/students`
-      //    2. prove res has right status, data type
-      //    3. prove the number of students we got back is equal to number
-      //       in db.
-      let res;
-      return chai.request(app)
-        .get('/api/students')
-        .then(_res => {
-          res = _res;
-          res.should.have.status(200);
-          // otherwise our db seeding didn't work
-          res.body.students.should.have.length.of.at.least(1);
-
-          return Students.count();
-        })
-        .then(count => {
-          // the number of returned students should be same
-          // as number of students in DB
-          expect(res.body.students).to.have.lengthOf(count);
-        })
-    });
-  });
-
-  describe('POST endpoint', function () {
-    // strategy: make a POST request with data,
-    // then prove that the student we get back has
-    // right keys, and that `id` is there (which means
-    // the data was inserted into db)
-    it('should add a new student', function () {
-
-      const newStudent = {
-        referenceId: faker.name.firstName(),
-        userId: faker.name.firstName(),
-        name: faker.lorem.words()
-      };
-
-      return chai.request(app)
-        .post('/api/students')
-        .send(newStudent)
-        .then(function (res) {
-          res.should.have.status(201);
-          res.should.be.json;
-          res.body.should.be.a('object');
-          res.body.should.include.keys("id", "name", "userId", "notes", "nickName");
-          res.body.id.should.not.be.null;
-          res.body.name.should.equal(newStudent.name);
-          return Students.findById(res.body.id);
-        })
-        .then(function (students) {
-          students.name.should.equal(newStudent.name);
-          students.userId.should.equal(newStudent.userId);
-        });
-    });
-  });
-
 describe('PUT endpoint', function () {
 
     // strategy:
@@ -131,9 +72,9 @@ describe('PUT endpoint', function () {
         referenceId: 'hello',
         userId: 'cats cats cats',
         name: 'dogs dogs dogs',
-        nickName: 'level 2 Jerry',
+        nickName: 'level 2 Jim',
         notes: 'pigs pigs pigs',
-        gender: 'boy'
+        pronoun: 'boy'
       };
 
       return Students
