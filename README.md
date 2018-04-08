@@ -49,6 +49,8 @@ Backend:
 ## Demo
 
 - [Live Demo](https://secret-badlands-91696.herokuapp.com/)
+- Demo username: demo
+- Demo password: password123
 
 ## Author
 
