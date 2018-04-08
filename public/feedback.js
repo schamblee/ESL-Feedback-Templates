@@ -17,7 +17,9 @@ function getSavedFeedback() {
     success: function(resultData) {
       displayFeedbackTableData(resultData);
       $('.ui.accordion').accordion();
-    }
+    },
+    error: handleError,
+    beforeSend: setHeader
   });
 }
 
@@ -27,7 +29,9 @@ function getSavedStudents(callbackFn) {
     url: `api/students/user/${currentUser}`,
     contentType: 'application/json',
     dataType: 'json',
-    success: callbackFn
+    success: callbackFn,
+    error: handleError,
+    beforeSend: setHeader
   });
 }
 
@@ -37,30 +41,57 @@ function getStudentInfo(studentId, callbackFn) {
     url: `api/students/${studentId}`,
     contentType: 'application/json',
     dataType: 'json',
-    success: callbackFn
+    success: callbackFn,
+    error: handleError,
+    beforeSend: setHeader
   });
 }
 
-function getTemplateData(referenceId, student, pronoun) {
+function getTemplateData(studentId, referenceId, student, pronoun) {
     $.ajax({
     type: 'GET',
     url: `api/templates/ref/${referenceId}`,
     contentType: 'application/json',
     dataType: 'json',
     success: function(result) {
-      displayTemplateModal(result, student, pronoun);
-    }
+      displayTemplateModal(result, studentId, student, pronoun);
+    },
+    error: handleError,
+    beforeSend: setHeader
   });
 }
 
+function getStudentName(id, studentId) {
+  $.getJSON(`api/students/${studentId}`, 
+    function success (data) {
+      return data.student.name ?  
+      $(`#templateStudentName-${id}`).text(data.student.name) :
+      alert("There was an error loading the student's name. Please try again!")
+    });
+}
+
+function getLessonCode(id, templateId) {
+  console.log(templateId)
+  $.getJSON(`api/templates/${templateId}`, 
+    function success (data) { 
+      return data.template.code ?
+      $(`#templateLessonCode-${id}`).text(data.template.code) :
+      alert("There was an error loading the lesson code. Please try again!")
+    });
+}
+
 function renderFeedbackResult(result) {
+  let id = result.id
+  let date = moment(result.created).format("MMMM Do YYYY")
+  getStudentName(id, result.studentId);
+  getLessonCode(id, result.lessonId);
   return `<div class="ui accordion">
     <tr>
     <div class="title">
       <i class="dropdown icon"></i> 
-      ${result.studentId}
-      ${result.lessonId}
-      ${result.created}
+      <p id="templateStudentName-${id}" class="templateTableHeader"></p>
+      <p id="templateLessonCode-${id}" class="templateTableHeader"></p>
+      <p id="createDate" class="templateTableHeader">${date}</p>
     </div>
       <div class="content">
         <p class="savedFeedback">${result.text}</p>
@@ -109,17 +140,17 @@ function renderTemplateData(data, student, pronoun) {
   return template;
 }
 
-function displayTemplateModal(data, student, pronoun) {
+function displayTemplateModal(data, studentId, student, pronoun) {
   const result = renderTemplateData(data, student, pronoun);
-  $('#templateModalHeader').text(`${data.template[0].code} ${student}`)
+  $('#templateModalHeader').html(`<div id="code" data-id="${data.template[0].id}">${data.template[0].code}</div><div id="name" data-id="${studentId}">${student}</div>`)
   $('.js-template-output').prop('hidden', false);
   $('.ui.modal.js-template-output').modal('show');
   $('#feedback-input').html(result);
 }
 
 function renderStudentDropDownResult(result) {
-  return `<option name="student" data-pronoun="${result.pronoun}" data-name="${result.name}" 
-    class="item">${renderStudentDropdownName(result)}</option>`
+  return `<option name="student" data-id="${result.id}" data-pronoun="${result.pronoun}" 
+    data-name="${result.name}" class="item">${renderStudentDropdownName(result)}</option>`
 }
 
 function renderStudentDropdownName(result) {
@@ -175,10 +206,11 @@ function watchAddFeedbackClick() {
     event.preventDefault();
     classroomUrl = $('#classroom-url').val();
     urlRefs = classroomUrl.split('-');
-    student = $('option[name="student"]:selected').data('name')
+    studentName = $('option[name="student"]:selected').data('name')
+    studentId = $('option[name="student"]:selected').data('id')
     pronoun = $('option[name="student"]:selected').data('pronoun')
     referenceId = urlRefs[1];
-	  getTemplateData(referenceId, student, pronoun);
+	  getTemplateData(studentId, referenceId, studentName, pronoun);
   });
 }
 
@@ -186,9 +218,8 @@ function watchSaveFeedbackClick() {
   $('.js-template-output').on('submit', '#templateForm', function(event) {
     event.preventDefault();
     classroomUrl = $('#classroom-url').val();
-    urlRefs = classroomUrl.split('-')
-    studentId = 
-    lessonId = urlRefs[1]
+    studentId = $('#name').data('id')
+    lessonId = $('#code').data('id')
     $('#copied-message').prop('hidden', true);
     $.ajax({
       type: 'POST',
@@ -207,22 +238,24 @@ function watchSaveFeedbackClick() {
       $('#student').val('');
     },
     error: handleError,
-    beforeSend: function(xhr) { 
-      xhr.setRequestHeader('Authorization','Bearer ' + token) 
-    }
+    beforeSend: setHeader
   })
   })
 }
 
-function handleError(err){
+function setHeader (xhr) {
+  xhr.setRequestHeader('Authorization','Bearer ' + token)
+}
+
+function handleError(err) {
     if (err.status === 401){
         console.log("There was an error")
         return;
     }
-    $('#feedback').append(
+    $('#feedbackTableData').append(
       `<p>Error: Server returned ${err.status}. ${err.responseText} </p>`
     );
-  }
+}
 
 function watchSaveStudent() {
   $('.studentForm').submit((event) => {
@@ -254,7 +287,9 @@ function watchSaveStudent() {
         }),
         success: function(resultData) {
         console.log(resultData)
-      }
+        },
+        error: handleError,
+        beforeSend: setHeader
       }); 
     } 
     else {
@@ -273,7 +308,9 @@ function watchSaveStudent() {
       }),
       success: function(resultData) {
         console.log(resultData)
-      }
+      },
+      error: handleError,
+      beforeSend: setHeader
     });
     $('#studentName').data('edit');
   }
@@ -330,7 +367,6 @@ function watchEditStudentClick() {
   $('#student-rows').on('click', '.editStudent', (event) => {
     event.preventDefault();
     let studentId= $(event.currentTarget).data('id');
-    console.log(studentId);
     getStudentInfo(studentId, displayEditStudentModal);
   });
 }

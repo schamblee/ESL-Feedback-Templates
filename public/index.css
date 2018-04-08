@@ -187,6 +187,10 @@ h2 {
   font: inherit;
 }
 
+.templateTableHeader {
+  display: inline-block;
+}
+
 @media only screen and (max-width: 700px) {
   .ui.fixed.menu {
     display: none !important;
