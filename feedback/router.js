@@ -81,9 +81,6 @@ router.put('/:id', (req, res) => {
     return res.status(400).json({ message: message });
   }
 
-  // we only support a subset of fields being updateable.
-  // if the user sent over any of the updatableFields, we udpate those values
-  // in document
   const toUpdate = {};
   const updateableFields = ['text'];
 
@@ -96,14 +93,14 @@ router.put('/:id', (req, res) => {
   Feedback
     // all key/value pairs in toUpdate will be updated -- that's what `$set` does
     .findByIdAndUpdate(req.params.id, { $set: toUpdate })
-    .then(students => res.status(204).end())
+    .then(feedback => res.status(204).end())
     .catch(err => res.status(500).json({ message: 'Internal server error' }));
 });
 
 router.delete('/:id', (req, res) => {
   Feedback
     .findByIdAndRemove(req.params.id)
-    .then(students => res.status(204).end())
+    .then(feedback => res.status(204).end())
     .catch(err => res.status(500).json({ message: 'Internal server error' }));
 });
 
