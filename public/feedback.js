@@ -344,7 +344,7 @@ function watchUpdateStudent() {
   $('#updateStudent').click((event) => {
     event.preventDefault();
     console.log("Update student click")
-    name = $('#studentNameEdit').val();
+    name = $('#studentNameEdit').text();
     editEvent = $('#studentNameEdit').data('edit');
     id = $('#studentIdEdit').text();
     pronoun = $('input[name="pronounEdit"]:selected').val()
