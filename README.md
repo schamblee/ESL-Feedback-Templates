@@ -35,8 +35,8 @@ Create Account Form:
 Front-End:
 * HTML
 * CSS
-* JavaScript (with jQuery)
-* Semantic UI CSS Framework
+* JavaScript (with jQuery, Ajax and moment.js)
+* Semantic UI
 
 Backend:
 * Node.js
@@ -48,7 +48,7 @@ Backend:
 
 ## Features
 
-* Create an account with a hashed password and JWT authentication
+* Create an account with a hashed password and login with JWT authentication
 * Save/edit student information including their name, a nickname and notes about the student
 * Save/edit feedback for classes by copying and pasting the classroom URL
 
