@@ -1,3 +1,9 @@
+## Demo
+
+- [Live Demo](https://secret-badlands-91696.herokuapp.com/)
+- Demo username: demo
+- Demo password: password123
+
 # 5 Apple Feedback
 
 Lesson feedback generator for [VIPKID](https://t.vipkid.com.cn/activity/popup?refereeId=4057772&refersourceid=a01) ESL teachers. Stores student information and creates custom feedback templates to save teachers time writing their feedback.
@@ -45,12 +51,6 @@ Backend:
 * Create an account with a hashed password and JWT authentication
 * Save/edit student information including their name, a nickname and notes about the student
 * Save/edit feedback for classes by copying and pasting the classroom URL
-
-## Demo
-
-- [Live Demo](https://secret-badlands-91696.herokuapp.com/)
-- Demo username: demo
-- Demo password: password123
 
 ## Author
 
