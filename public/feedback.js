@@ -47,6 +47,25 @@ function getStudentInfo(studentId, callbackFn) {
   });
 }
 
+function getStudentName(id, studentId) {
+  $.getJSON(`api/students/${studentId}`, 
+    function success (data) {
+      return data.student.name ?  
+      $(`#templateStudentName-${id}`).text(data.student.name) :
+      alert("There was an error loading the student's name. Please try again!")
+    });
+}
+
+function getLessonCode(id, templateId) {
+  console.log(templateId)
+  $.getJSON(`api/templates/${templateId}`, 
+    function success (data) { 
+      return data.template.code ?
+      $(`#templateLessonCode-${id}`).text(`VIPKID Lesson Code: ${data.template.code}`) :
+      alert("There was an error loading the lesson code. Please try again!")
+    });
+}
+
 function getTemplateData(referenceId, student, pronoun) {
   $.ajax({
     type: 'GET',
@@ -75,6 +94,50 @@ function getFeedback(id) {
   });
 }
 
+function createStudent(name, pronoun, notes) {
+    $.ajax({
+      type: 'POST',
+      url: 'api/students/',
+      contentType: 'application/json',
+      dataType: 'json',
+      data: JSON.stringify({
+        name,
+        userId: currentUser,
+        pronoun,
+        notes
+    }),
+    success: function(resultData) {
+      getSavedFeedback();
+      $('#classroom-url').val('');
+      $('#student').val('')
+    },
+    error: handleError,
+    beforeSend: setHeader
+  })
+}
+
+function createFeedback(lessonId, studentId, text) {
+    $.ajax({
+      type: 'POST',
+      url: 'api/feedback/',
+      contentType: 'application/json',
+      dataType: 'json',
+      data: JSON.stringify({
+        lessonId,
+        userId: currentUser,
+        studentId,
+        text
+    }),
+    success: function(resultData) {
+      getSavedFeedback();
+      $('#classroom-url').val('');
+      $('#student').val('')
+    },
+    error: handleError,
+    beforeSend: setHeader
+  })
+}
+
 function deleteSavedFeedback(id) {
   console.log('delete')
   $.ajax({
@@ -86,25 +149,6 @@ function deleteSavedFeedback(id) {
     error: handleError,
     beforeSend: setHeader
   });
-}
-
-function getStudentName(id, studentId) {
-  $.getJSON(`api/students/${studentId}`, 
-    function success (data) {
-      return data.student.name ?  
-      $(`#templateStudentName-${id}`).text(data.student.name) :
-      alert("There was an error loading the student's name. Please try again!")
-    });
-}
-
-function getLessonCode(id, templateId) {
-  console.log(templateId)
-  $.getJSON(`api/templates/${templateId}`, 
-    function success (data) { 
-      return data.template.code ?
-      $(`#templateLessonCode-${id}`).text(`VIPKID Lesson Code: ${data.template.code}`) :
-      alert("There was an error loading the lesson code. Please try again!")
-    });
 }
 
 
@@ -242,22 +286,29 @@ function displayEditStudentModal(data) {
 }
 
 
-function copyFeedback() {
+function copyNewFeedback() {
   var copyText = document.getElementById("feedback-input");
   copyText.select();
   document.execCommand("Copy");
-  $('.copied-message').prop('hidden', false)
+  $('#new-copied-message').prop('hidden', false)
+}
+
+function copyUpdateFeedback() {
+  var copyText = document.getElementById("feedback-edit-input");
+  copyText.select();
+  document.execCommand("Copy");
+  $('#edit-copied-message').prop('hidden', false)
 }
 
 function watchAddFeedbackClick() {
   $('#templateForm').submit(event => {
     event.preventDefault();
-    classroomUrl = $('#classroom-url').val();
-    urlRefs = classroomUrl.split('-');
-    studentName = $('option[name="student"]:selected').data('name')
-    studentId = $('option[name="student"]:selected').data('id')
-    pronoun = $('option[name="student"]:selected').data('pronoun')
-    referenceId = urlRefs[2];
+    let classroomUrl = $('#classroom-url').val();
+    let urlRefs = classroomUrl.split('-');
+    let studentName = $('option[name="student"]:selected').data('name')
+    let studentId = $('option[name="student"]:selected').data('id')
+    let pronoun = $('option[name="student"]:selected').data('pronoun')
+    let referenceId = urlRefs[2];
     $('#templateModalHeaderName').html(`<div id="name" data-id="${studentId}">${studentName}</div>`)
 	  getTemplateData(referenceId, studentName, pronoun);
   });
@@ -266,29 +317,12 @@ function watchAddFeedbackClick() {
 function watchSaveFeedbackClick() {
   $('.js-template-output').on('submit', '#templateEditForm', function(event) {
     event.preventDefault();
-    classroomUrl = $('#classroom-url').val();
-    studentId = $('#name').data('id')
-    lessonId = $('#code').data('id')
+    let classroomUrl = $('#classroom-url').val('');
+    let studentId = $('#name').data('id');
+    let lessonId = $('#code').data('id');
+    let text = $('#feedback-input').text();
+    createFeedback(lessonId, studentId, text)
     $('.copied-message').prop('hidden', true);
-    $.ajax({
-      type: 'POST',
-      url: 'api/feedback/',
-      contentType: 'application/json',
-      dataType: 'json',
-      data: JSON.stringify({
-        lessonId,
-        userId: currentUser,
-        studentId,
-        text: $('.feedback-input').val()
-    }),
-    success: function(resultData) {
-      getSavedFeedback();
-      $('#classroom-url').val('');
-      $('#student').val('')
-    },
-    error: handleError,
-    beforeSend: setHeader
-  })
   })
 }
 
@@ -307,14 +341,15 @@ function handleError(err) {
 }
 
 function watchUpdateStudent() {
-  $('#studentFormEdit').submit((event) => {
+  $('#updateStudent').click((event) => {
     event.preventDefault();
-    name = $('#studentName').val();
-    editEvent = $('#studentName').data('edit');
-    id = $('#studentId').text();
-    pronoun = $('input[name="pronoun"]:selected').val()
-    nickName = $('#studentNickName').val();
-    notes = $('#studentNotes').val();  
+    console.log("Update student click")
+    name = $('#studentNameEdit').val();
+    editEvent = $('#studentNameEdit').data('edit');
+    id = $('#studentIdEdit').text();
+    pronoun = $('input[name="pronounEdit"]:selected').val()
+    nickName = $('#studentNickNameEdit').val();
+    notes = $('#studentNotesEdit').val();  
     $.ajax({
       type: 'PUT',
       url: `api/students/${id}`,
@@ -341,33 +376,14 @@ function watchSaveStudent() {
   $('.saveStudent').click((event) => {
     event.preventDefault();
     name = $('#studentName').val();
-    editEvent = $('#studentName').data('edit');
-    id = $('#studentId').text();
     pronoun = $('input[name="pronoun"]:checked').val()
     nickName = $('#studentNickName').val();
     notes = $('#studentNotes').val();
     classroomUrl = $('#classroom-url').val();
-    urlRefs = classroomUrl.split('-')
-    studentRefId = urlRefs[2]
-    $.ajax({
-      type: 'POST',
-      url: 'api/students',
-      contentType: 'application/json',
-      dataType: 'json',
-      data: JSON.stringify({
-        referenceId: studentRefId,
-        pronoun: pronoun,
-        userId: currentUser,
-        name: name,
-        nickName,
-        notes
-      }),
-      success: function() {
-        getSavedStudents(displayStudentDropdownData);
-      },
-      error: handleError,
-      beforeSend: setHeader
-    });
+    urlRefs = classroomUrl.split('-');
+    createStudent(name, pronoun, notes);
+    getSavedStudents(displayStudentTableData);
+    getSavedStudents(displayStudentDropdownData);
   })
 }
 
@@ -422,6 +438,7 @@ function watchEditStudentClick() {
     event.preventDefault();
     console.log("click")
     let studentId= $(event.currentTarget).data('id');
+    $('#studentIdEdit').text(studentId)
     getStudentInfo(studentId, displayEditStudentModal);
   });
 }
@@ -467,6 +484,7 @@ function watchUpdateFeedbackClick() {
     let lessonId = $('#lessonIdFeedbackEditModal').text();
     let text = $('#feedback-edit-input').text();
     let studentId = $('#studentIdFeedbackEditModal').text();
+    $('.copied-message').prop('hidden', true);
     $.ajax({
       type: 'PUT',
       url: `api/feedback/${id}`,
@@ -504,6 +522,7 @@ function handleFeedback() {
   watchDemoClick();
   watchEditSavedFeedbackClick();
   watchUpdateFeedbackClick();
+  watchUpdateStudent();
 }
 
 $(handleFeedback)

@@ -83,12 +83,9 @@ router.put('/:id', (req, res) => {
     console.error(message);
     return res.status(400).json({ message: message });
   }
-
-  // we only support a subset of fields being updateable.
-  // if the user sent over any of the updatableFields, we udpate those values
-  // in document
+  
   const toUpdate = {};
-  const updateableFields = ['name', 'nickName', 'referenceId', 'notes', 'pronoun'];
+  const updateableFields = ['nickName', 'pronoun', 'notes'];
 
   updateableFields.forEach(field => {
     if (field in req.body) {
