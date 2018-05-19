@@ -44,7 +44,7 @@ Backend:
 * MongoDB / Mongoose
 * Heroku
 * JWT
-* Passport.js and JWT for use authentication
+* Passport.js and JWT for user authentication
 
 ## Features
 
