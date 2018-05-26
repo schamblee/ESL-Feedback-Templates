@@ -16,11 +16,11 @@ As an online ESL (English as a second language) teacher for [VIPKID](https://t.v
 
 Feedback Template Form:
 
-![Feedback Template Form](http://i63.tinypic.com/24qsfhg.png)
+![Feedback Template Form](https://image.ibb.co/hNm4i8/Screen_Shot_2018_05_26_at_11_22_18_AM.png)
 
 Edit Saved Feedback:
 
-![Edit Saved Feedback](http://i68.tinypic.com/25ryzkl.png)
+![Edit Saved Feedback](https://image.ibb.co/hN0Qqo/Screen_Shot_2018_05_26_at_11_23_50_AM.png)
 
 Landing Page:
 
