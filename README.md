@@ -24,7 +24,7 @@ Edit Saved Feedback:
 
 Landing Page:
 
-![Landing Page](http://i64.tinypic.com/2rrqirs.png)
+![Landing Page](https://image.ibb.co/eDLV5o/Screen_Shot_2018_05_26_at_11_11_30_AM.png)
 
 Create Account Form:
 
