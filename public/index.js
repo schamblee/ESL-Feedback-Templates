@@ -11,6 +11,46 @@ $(document).ready( () => {
   });
 });
 
+function watchDemo() {
+  $('#demo').on('click', function(event) {
+      event.preventDefault(); 
+      console.log('click')
+      requestLoginJWT('demo', 'password123');
+  });
+}
+
+function requestLoginJWT(username, password) {
+$.ajax({
+    type: 'POST',
+    url: 'api/auth/login',
+    contentType: 'application/json',
+    dataType: 'json',
+    data: JSON.stringify({
+    username: username,
+    password: password
+  }),
+  success: function(resultData) {
+    console.log(resultData.userId)
+    localStorage.setItem('token', resultData.authToken);
+    localStorage.setItem('user', resultData.userId);
+    $.ajax({
+      type: 'GET',
+      url: 'api/protected',
+      contentType: 'application/json',
+      dataType: 'json',
+      headers: {
+        'Authorization': "Bearer " + localStorage.getItem('token')
+      },
+      success: window.location.href = "/feedback"
+    })
+  },
+  error: function(err) {
+    console.info('The login information is incorrect');
+    console.error(err);
+  } 
+});
+}
+
 function watchCreateAccountSubmit() {
   $('#registerForm').on('submit', function(event) {
     event.preventDefault();
@@ -90,6 +130,7 @@ function requestJWT(username, email, password) {
 
 function handleRegistration() {
   watchCreateAccountSubmit();
+  watchDemo();
 }
 
 $(handleRegistration);
